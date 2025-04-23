@@ -1,0 +1,1077 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.24.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Injective, Surjective and bi-jective _ Chia-ch’i‘s Web page</title>
+<meta name="description" content="A small concept in discrete mathematics">
+
+
+  <meta name="author" content="Chia-ch'i">
+  
+  <meta property="article:author" content="Chia-ch'i">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_GB">
+<meta property="og:site_name" content="Chia-ch'i‘s Web page">
+<meta property="og:title" content="Injective, Surjective and bi-jective">
+<meta property="og:url" content="http://localhost:4000/Injective,-Surjective-and-Bi-jective/">
+
+
+  <meta property="og:description" content="A small concept in discrete mathematics">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2023-08-21T00:00:00-04:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="http://localhost:4000/Injective,-Surjective-and-Bi-jective/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "Chia-ch'i",
+      "url": "http://localhost:4000/"
+    
+  }
+</script>
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+
+  <link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Chia-ch'i‘s Web page Feed">
+
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--post">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          Chia-ch'i‘s Web page
+          <span class="site-subtitle"> </span>
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/post/">All Posts</a>
+            </li><li class="masthead__menu-item">
+              <a href="/collection-archive/">Collections</a>
+            </li><li class="masthead__menu-item">
+              <a href="https://chat.openai.com/">Google</a>
+            </li><li class="masthead__menu-item">
+              <a href="/about/">About</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+  
+    
+
+
+
+<nav class="breadcrumbs">
+  <ol itemscope itemtype="https://schema.org/BreadcrumbList">
+    
+    
+    
+      
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a href="/" itemprop="item"><span itemprop="name">Home</span></a>
+
+          <meta itemprop="position" content="1" />
+        </li>
+        <span class="sep">/</span>
+      
+      
+        <li class="current">Injective, Surjective and bi-jective</li>
+      
+    
+  </ol>
+</nav>
+
+  
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person" class="h-card">
+
+  
+    <div class="author__avatar">
+      <a href="http://localhost:4000/">
+        <img src="/assets/images/88x88.png" alt="Chia-ch'i" itemprop="image" class="u-photo">
+      </a>
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name p-name" itemprop="name">
+      <a class="u-url" rel="me" href="http://localhost:4000/" itemprop="url">Chia-ch'i</a>
+    </h3>
+    
+      <div class="author__bio p-note" itemprop="description">
+        <p>The primary purpose of this website is to motivate me to write about life, thoughts, and learning observations.</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name" class="p-locality">Atlanta.US</span>
+        </li>
+      
+
+      
+        
+          
+            <li><a href="mailto:notmyemailcode@gmail.com" rel="nofollow noopener noreferrer me"><i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+          
+            <li><a href="https://bokehforu.github.io/" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fas fa-fw fa-link" aria-hidden="true"></i><span class="label">Website</span></a></li>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer me">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <div class="archive">
+    
+      <h1 id="page-title" class="page__title">Injective, Surjective and bi-jective</h1>
+    
+    <p>A small concept in discrete mathematics</p>
+
+<h1 id="函数的类别-injective-surjective-and-bi-jective">函数的类别 Injective, Surjective and bi-jective</h1>
+
+<h2 id="functions-domain-codomainrange">Functions, Domain, Codomain,Range</h2>
+
+<p><strong>Function（函数）</strong></p>
+
+<p>函数是一种关系，在给定定义域的情况下，将定义域中的每个元素<strong>映射</strong>到唯一的值域中的元素。函数通常用 f(x) 或 g(y) 等符号表示，其中 x 和 y 是定义域和值域中的元素。函数描述了输入和输出之间的映射关系。</p>
+
+<p><strong>Domain（定义域）</strong></p>
+
+<p>The set of input values</p>
+
+<p>定义域是函数的所有可能输入值的集合。它是函数可以接受的输入范围。例如，对于函数 f(x) = x^2，定义域可以是实数集合 R，因为任何实数都可以作为该函数的输入。</p>
+
+<p><strong>Codomain（值域）</strong></p>
+
+<p>The set of possible output values <font color="red">那我感觉codomian就一直是$\R$</font> <font color="blue">我有点不太理解这个codmain这个set是如何产生的，一个</font></p>
+
+<p>值域是函数中所有可能的输出值的集合。它是函数可以产生的所有可能结果的范围。与定义域不同，值域不一定是函数实际映射到的值的集合，而是函数可能生成的所有结果的集合。例如，对于函数 f(x) = x^2，值域可以是非负实数集合 R≥0，因为平方函数的结果始终为非负实数。</p>
+
+<p><strong>Range（值域*）</strong></p>
+
+<p>The set of actual output values</p>
+
+<p>Range是函数实际映射到的值的集合。它是函数在给定定义域上生成的所有实际输出值的集合。通常，值域是通过确定函数的所有可能输出值并排除任何不可达的值来确定的。例如，对于函数 f(x) = x^2，如果定义域为实数集合 R，那么值域将是非负实数集合 R≥0，因为平方函数的结果始终为非负实数。</p>
+
+<h2 id="injective-surjective-and-bi-jective定义和简明解释">Injective, Surjective and bi-jective定义和简明解释</h2>
+
+<p>Definition</p>
+
+<p>来源： https://www.math.fsu.edu/~pkirby/mad2104/SlideShow/s4_2.pdf</p>
+
+<p>Given $f: A \rightarrow B$</p>
+
+<ol>
+  <li>
+    <p>$f$ is <strong>one-to-one</strong> (short hand is $1-1$ ) or <strong>injective</strong> if preimages(预先映射) are unique. In this case, $(a \neq b) \rightarrow(f(a) \neq f(b))$. <font color="red">一个a只匹配一个在set B中的b</font></p>
+  </li>
+  <li>
+    <p>$f$ is <strong>onto</strong> or <strong>surjective</strong> if every $y \in B$ has a preimage. In this case, the range of $f$ is equal to the codomain.<font color="red">我感觉codomian和range的关系没搞明白</font></p>
+  </li>
+  <li>
+    <p>$f$ is <strong>bijective</strong> if it is surjective and injective (one-to-one and onto).</p>
+  </li>
+</ol>
+
+<p>来源：<strong>YouTube视频</strong></p>
+
+<ul>
+  <li>one to one / injective
+    <ul>
+      <li>For
+ every input there is unique output. All the elements in the domain
+ have to be used, but <strong>all</strong> elements in the co-domain <strong>need not be used</strong>.就是在input的元素中，映射出去，co-domain中要留有剩余。</li>
+      <li></li>
+    </ul>
+  </li>
+  <li>onto / Surjective
+    <ul>
+      <li>(Range
+ = co-domain)
+ Every element in the co-domain is the image of <strong>at least</strong> one element in
+ the domain.</li>
+      <li>或者说range要=co-domain</li>
+    </ul>
+  </li>
+  <li>bijective
+    <ul>
+      <li>These functions are one-one functions but <strong>every</strong> element in the co-domain
+ is used.</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="我的理解">我的理解</h3>
+
+<p>对于函数，我们考虑到A这个set和B这个set中存在的一些元素，这是背景信息要求。那么，当A的元素出发对应到了B中的元素，这就是满足函数的关系。在这个基础上有两个方向。<font color="red">第一个方向是one to one，这个对满足function的关系的要求基础之上，额外要求对于set A中的元素应该全部射出，set B可以留有空白的元素。</font> 而另外一个方向，则是指明了在set B中，B中的元素全部至少被A中的一个元素被射中，甚至可以被A中的多个元素射中。而bijective 就是这两个路径的叠加，就是set A中的元素被全部射出，而set B中的元素全部被set A中的元素对应</p>
+
+<font color="red">上面的理解感觉是错的</font>
+<p>，红色部分one to one的理解错了</p>
+
+<h3 id="新的理解">新的理解</h3>
+
+<p>https://www.youtube.com/watch?v=MY4-5mXfWzo&amp;ab_channel=Areallnamesgone</p>
+
+<p>视频中显示，函数的定义是set A中的元素都是单个箭头出发，而不是从a1出发有两个箭头，满足了这个关系就是<strong>函数</strong>，我觉得这个好理解，因为满足了线性关系后，set A中的元素对应了两个set B中的元素(比如f(1)=2但是f(1)又可以=34)，这非常奇怪了，线性关系就被破坏了。继续到<strong>one to one</strong>，可以进行字面意思的理解，one to one就是在set A到 set B的映射关系中，一个在set A(domain)中的元素只可以唯一对应set B中的元素，比如(set A{a_1,a_2,a_3,a_4}和set B{b_1,b_2,b_3,b_4,b_5}这里的元素，假设他们下标匹配对应，a_1配备b_1…最后留下b_5是空的，没有被A中的元素中对应的，这样也是可以的。因为这个case满足了我们对于set A中的元素都要可以对应set B中的这种情况)。继续<strong>onto</strong>，这个要求是set B中的元素at least 都要被A中出发的元素射中，就是说set B没有空的元素，但是一个在set B中的元素可以被很多从set A的元素出发的箭头(关系)对应。最后<strong>bijective</strong>，满足了set A中的单一输出箭头(函数，映射关系)都有一个在set B中对应的元素(one to one)，同时set B中的元素都接受到set A的元素中出发的箭头(onto),这两个路径的分别满足，让set A和set B中的元素得到了全部的匹配和各自唯一的匹配。</p>
+
+<h2 id="function关系的演变">Function关系的演变</h2>
+
+<p><img src="https://www.mathsisfun.com/sets/images/function-mapping.svg" alt="function-mapping" /></p>
+
+<p>https://www.youtube.com/watch?v=ojHAAqgW1_M&amp;ab_channel=TheMathSorcerer</p>
+
+
+
+<ul class="taxonomy__index">
+  
+  
+    <li>
+      <a href="#2025">
+        <strong>2025</strong> <span class="taxonomy__count">1</span>
+      </a>
+    </li>
+  
+    <li>
+      <a href="#2024">
+        <strong>2024</strong> <span class="taxonomy__count">4</span>
+      </a>
+    </li>
+  
+    <li>
+      <a href="#2023">
+        <strong>2023</strong> <span class="taxonomy__count">8</span>
+      </a>
+    </li>
+  
+</ul>
+
+
+
+
+  <section id="2025" class="taxonomy__section">
+    <h2 class="archive__subtitle">2025</h2>
+    <div class="entries-list">
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/recursive-problem/" rel="permalink">recursive problem
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          9 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Begging
+
+</p>
+  </article>
+</div>
+
+      
+    </div>
+    <a href="#page-title" class="back-to-top">Back to top &uarr;</a>
+  </section>
+
+  
+
+  <section id="2024" class="taxonomy__section">
+    <h2 class="archive__subtitle">2024</h2>
+    <div class="entries-list">
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/Life-goals-at-30/" rel="permalink">Life goals before the age of 30 (in addition to finding a job)
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">:)
+
+</p>
+  </article>
+</div>
+
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/visa-preparation/" rel="permalink">签证准备材料list
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">记录签证准备材料的list
+
+</p>
+  </article>
+</div>
+
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/how-to-read-mtf-curves.md/" rel="permalink">Notes for ‘How To Read MTF Curves’ article
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          16 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">文章翻译, 阅读, 解读MTF曲线, 笔记总结
+Preface
+
+</p>
+  </article>
+</div>
+
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/master-apply/" rel="permalink">The summary (guide) for DIY master application in 2024 fall
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          10 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+
+</p>
+  </article>
+</div>
+
+      
+    </div>
+    <a href="#page-title" class="back-to-top">Back to top &uarr;</a>
+  </section>
+
+  
+
+  <section id="2023" class="taxonomy__section">
+    <h2 class="archive__subtitle">2023</h2>
+    <div class="entries-list">
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/inner-producted/" rel="permalink">Inner producted 一些问题
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">A record of some simple ideas.
+
+</p>
+  </article>
+</div>
+
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/learning-how-to-learn-powerful-mental-tools-to-help-you-master-tough-subjects/" rel="permalink">learning how to learn powerful mental tools to help you master tough subjects
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          46 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">UCLA online
+learning how to learn powerful mental tools to help you master tough subjects
+
+</p>
+  </article>
+</div>
+
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/CMU-Discrete-mathematics-2001-notes/" rel="permalink">Discrete Mathematics
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">虎头蛇尾…
+
+</p>
+  </article>
+</div>
+
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/Injective,-Surjective-and-Bi-jective/" rel="permalink">Injective, Surjective and bi-jective
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          2 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">A small concept in discrete mathematics
+
+</p>
+  </article>
+</div>
+
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/Lec1-and-lec2-content/" rel="permalink">MIT missing Cour
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          5 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">进度条…(2/8)
+
+</p>
+  </article>
+</div>
+
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/proof-of-Cramer-s-rule/" rel="permalink">Proof of Cramer’s Rule
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">The article contains three proofs.
+
+</p>
+  </article>
+</div>
+
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/elec211pdf/" rel="permalink">ELEC211: Digital Electronics &amp; Microprocessor Systems
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          less than 1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+
+</p>
+  </article>
+</div>
+
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/comp-202/" rel="permalink">ELEC202 Lec 7&amp;8 FM&amp;PM
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          7 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">mainly talk about FM&amp;PM in ELEC202 at Lec 7&amp;8
+
+</p>
+  </article>
+</div>
+
+      
+    </div>
+    <a href="#page-title" class="back-to-top">Back to top &uarr;</a>
+  </section>
+
+  
+
+
+  </div>
+</div>
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-GXFVKNJ25Z"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-GXFVKNJ25Z');
+</script>
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+
+    
+      <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2025 Chia-ch'i. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    <script type="text/javascript" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+
+
+
+  </body>
+</html>

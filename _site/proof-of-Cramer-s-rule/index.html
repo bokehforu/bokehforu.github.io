@@ -1,0 +1,1191 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.24.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Proof of Cramer’s Rule _ Chia-ch’i‘s Web page</title>
+<meta name="description" content="The article contains three proofs.">
+
+
+  <meta name="author" content="Chia-ch'i">
+  
+  <meta property="article:author" content="Chia-ch'i">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_GB">
+<meta property="og:site_name" content="Chia-ch'i‘s Web page">
+<meta property="og:title" content="Proof of Cramer’s Rule">
+<meta property="og:url" content="http://localhost:4000/proof-of-Cramer-s-rule/">
+
+
+  <meta property="og:description" content="The article contains three proofs.">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2023-08-02T00:00:00-04:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="http://localhost:4000/proof-of-Cramer-s-rule/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "Chia-ch'i",
+      "url": "http://localhost:4000/"
+    
+  }
+</script>
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+
+  <link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Chia-ch'i‘s Web page Feed">
+
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--post">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          Chia-ch'i‘s Web page
+          <span class="site-subtitle"> </span>
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/post/">All Posts</a>
+            </li><li class="masthead__menu-item">
+              <a href="/collection-archive/">Collections</a>
+            </li><li class="masthead__menu-item">
+              <a href="https://chat.openai.com/">Google</a>
+            </li><li class="masthead__menu-item">
+              <a href="/about/">About</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+  
+    
+
+
+
+<nav class="breadcrumbs">
+  <ol itemscope itemtype="https://schema.org/BreadcrumbList">
+    
+    
+    
+      
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a href="/" itemprop="item"><span itemprop="name">Home</span></a>
+
+          <meta itemprop="position" content="1" />
+        </li>
+        <span class="sep">/</span>
+      
+      
+        <li class="current">Proof of Cramer’s Rule</li>
+      
+    
+  </ol>
+</nav>
+
+  
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person" class="h-card">
+
+  
+    <div class="author__avatar">
+      <a href="http://localhost:4000/">
+        <img src="/assets/images/88x88.png" alt="Chia-ch'i" itemprop="image" class="u-photo">
+      </a>
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name p-name" itemprop="name">
+      <a class="u-url" rel="me" href="http://localhost:4000/" itemprop="url">Chia-ch'i</a>
+    </h3>
+    
+      <div class="author__bio p-note" itemprop="description">
+        <p>The primary purpose of this website is to motivate me to write about life, thoughts, and learning observations.</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name" class="p-locality">Atlanta.US</span>
+        </li>
+      
+
+      
+        
+          
+            <li><a href="mailto:notmyemailcode@gmail.com" rel="nofollow noopener noreferrer me"><i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+          
+            <li><a href="https://bokehforu.github.io/" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fas fa-fw fa-link" aria-hidden="true"></i><span class="label">Website</span></a></li>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer me">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <div class="archive">
+    
+      <h1 id="page-title" class="page__title">Proof of Cramer’s Rule</h1>
+    
+    <p>The article contains three proofs.</p>
+
+<h2 id="证明一">证明一</h2>
+
+<p><strong>证明</strong>：假设A是一个可逆的n × n矩阵，我们考虑线性系统AX = b。这个系统有一个唯一的解：</p>
+
+<font color="red">转换不了解，第二步转换</font>
+<font color="blue">感觉是基础问题不知道</font>
+<p>\(X = A^{-1}b = \frac{1}{|A|}\text{adj}(A) \cdot b = \frac{1}{|A|} \left[ \begin{array}{cccc} A_{11} &amp; A_{21} &amp; \cdots &amp; A_{n1} \\ \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\ A_{1n} &amp; A_{2n} &amp; \cdots &amp; A_{nn} \end{array} \right] b\)</p>
+
+<p>这里的 $\cdot$ 表示矩阵乘法。通过矩阵乘法的公式，第k个未知数$x_k$可以写成：</p>
+
+\[x_k = \frac{1}{|A|} \sum_{i=1}^{n} A_{ik}b_i = \frac{1}{|A|} \text{det} [c_1, \ldots, c_{k-1}, b, c_{k+1}, \ldots, c_n]\]
+
+<p>这里$c_i$表示A的第i列。第二个等式来自于对矩阵 $[c_1, \ldots, c_{k-1}, b, c_{k+1}, \ldots, c_n]$ 沿第k列进行的余子式展开。</p>
+
+<h2 id="证明二">证明二</h2>
+
+<p>首先，假设我们有一个可逆的矩阵$A$，且$\det(A) \neq 0$，并且$Ax = b$是一个线性方程。我们声明这个方程有一个唯一解。注意到$A^{-1}b$是一个解，因为$A(A^{-1}b) = (AA^{-1})b = b$，所以解是存在的。</p>
+
+<p>假设$s$是这个方程的一个任意解，所以$As = b$。但是，我们可以得到$s = (A^{-1}A)s = A^{-1}(As) = A^{-1}b$，所以$A^{-1}b$是唯一的解。</p>
+
+<p>对于每一个整数$i, 1 \leq i \leq n$，让$a_i$表示$A$的第$i$列，$e_i$表示单位矩阵$I_n$的第$i$列，并且让$X_i$表示从$I_n$通过替换第$i$列为列向量$x$得到的矩阵。</p>
+
+<p>我们知道对于任意的矩阵$A, B$，乘积$AB$的第$k$列是$A$和$B$的第$k$列的乘积。同时，观察到$Ae_k = a_k$对于$k = 1, …, n$。因此，通过乘法，我们有：</p>
+
+\[\begin{aligned}
+A X_i &amp; =A\left(e_1, \ldots, e_{i-1}, x, e_{i+1}, \ldots, e_n\right) \\
+&amp; =\left(A e_1, \ldots, A e_{i-1}, A x, A e_{i+1}, \ldots, A e_n\right) \\
+&amp; =\left(a_1, \ldots, a_{i-1}, b, a_{i+1}, \ldots, a_n\right) \\
+&amp; =M_i
+\end{aligned}\]
+
+<font color="red">因为$X_i$是用$x$替换了$I_n$的第$i$列，通过余子式展开计算$X_i$的行列式我们得到</font>
+<p>：
+\(det(X_i) = (-1)^{i+i}x_i\det(I_{n-1}) = 1 \cdot x_i \cdot 1 = x_i\)</p>
+
+<p>因此，根据行列式的乘法性质，我们有
+\(det(M_i) = \det(AX_i) = \det(A)\det(X_i) = \det(A)x_i\)</p>
+
+<p>所以，$x_i = \frac{\det(M_i)}{\det(A)}$，这就是我们所需要的。</p>
+
+<h2 id="证明三">证明三</h2>
+
+<h3 id="形式化总结">形式化总结</h3>
+
+<p>线性方程的矩阵表示
+\(Ax=c\)
+其中，系数矩阵 $A$ 是一个$  n×n$ 的方阵，$ x=(x_1,x_2,\cdots,x_n)^T$是一个长度为$n$ 的列向量，$c= (c_1,c_2,\cdots, C_n)^T$也是一个长度为n的列向量。</p>
+
+<p>根据克拉默法则，方程的解为：
+\(x_i=\frac{D_i}{D},i=1,2,\cdots,n\)</p>
+
+<p>其中， $Di$ 是用 $C$替换了$A$ 的第$i$列得到的矩阵的行列式,$D$则是$A$的行列式。可以看到，当$D$等于0时，原方程无解。</p>
+
+<h3 id="证明过程">证明过程</h3>
+
+<p>将线性方程组 $A x=c$ 两边同时左乘 $A$ 的逆, 得到 $A^{-1} A x=A^{-1} c$, 即：
+\(x=A^{-1} c \text { 。 }\)
+我们将系数矩阵表示成列向量的形式, 即:
+\(A=\left(p_1, p_2, \ldots, p_n\right)\)
+因此原方程又可以写成:
+\(\sum_{k=1}^n x_k p_k=c\)
+则行列式 $D_i$ 的值可以表示为:<font color="red">第二个等号到第三个等号，可以理解为行和列等价，提出一个scalar？</font> 
+\(\begin{aligned}
+D_i &amp; =\operatorname{det}\left(p_1, \ldots, p_{i-1}, c, p_{i+1} \ldots, p_n\right) \\
+&amp; =\operatorname{det}\left(p_1, \ldots, p_{i-1}, \sum_{k=1}^n x_k p_k, p_{i+1} \ldots, p_n\right) \\
+&amp; =\sum_{k=1}^n x_k \operatorname{det}\left(p_1, \ldots, p_{i-1}, p_k, p_{i+1} \ldots, p_n\right) \\
+&amp; =x_1 \operatorname{det}\left(p_1, \ldots, p_{i-1}, p_1, p_{i+1} \ldots, p_n\right)+x_2 \operatorname{det}\left(p_1, \ldots, p_{i-1}, p_2, p_{i+1} \ldots, p_n\right)+\ldots \\
+&amp; \quad+x_n \operatorname{det}\left(p_1, \ldots, p_{i-1}, p_n, p_{i+1} \ldots, p_n\right) \\
+&amp; =x_i \cdot \operatorname{det}(A) \quad \\
+&amp; =x_i \cdot D \quad
+\end{aligned}\)
+所以 $x_i=\frac{D_i}{D}$</p>
+
+<h2 id="总结">总结</h2>
+
+<h4 id="克拉默法则的表述"><strong>克拉默法则的表述</strong></h4>
+
+<table>
+  <tbody>
+    <tr>
+      <td>数域 $K$ 上 $\mathrm{n}$ 个方程的 $\mathrm{n}$ 元线性方程组有唯一解的充要条件 $</td>
+      <td>A</td>
+      <td>\neq 0$, 且解为 $\left(\frac{\left</td>
+      <td>B_1\right</td>
+      <td>}{</td>
+      <td>A</td>
+      <td>}, \frac{\left</td>
+      <td>B_2\right</td>
+      <td>}{</td>
+      <td>A</td>
+      <td>}, \cdots, \frac{\left</td>
+      <td>B_n\right</td>
+      <td>}{</td>
+      <td>A</td>
+      <td>}\right)$, 其中 $B_i$ 为用常数列替换 $A$ 第i列后的矩阵。</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="线性空间角度">线性空间角度</h4>
+
+<table>
+  <tbody>
+    <tr>
+      <td>若 $\alpha_1, \alpha_2, \ldots, \alpha_n$ 是 $K^n$ 的一组基, $\beta \in K^n$ ，则 $\beta=\sum_{i=1}^n \frac{\left</td>
+      <td>B_i\right</td>
+      <td>}{</td>
+      <td>A</td>
+      <td>} \alpha_i$ 。</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="问题-如何理解这一结果">问题 如何理解这一结果?</h4>
+
+<ol>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>$\frac{\left</td>
+          <td>B_i\right</td>
+          <td>}{</td>
+          <td>A</td>
+          <td>}$ 有什么意义?</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+  <li>行列式有什么意义?</li>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>为什么是 $\frac{\left</td>
+          <td>B_i\right</td>
+          <td>}{</td>
+          <td>A</td>
+          <td>}$ ?</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+  <li>对任意线性空间是否成立类似的结论?</li>
+  <li>能否类比定义域 $F$ 上的线性空间 $V$ 上的行列式 $\Delta: V^n \rightarrow F$, 从而有类似结论?</li>
+</ol>
+
+<p>​</p>
+
+<h3 id="几何角度">几何角度</h3>
+
+<p>在 $K^n$ 中将一标架作非退化仿射变换 $\sigma$ :
+\(\left\{\begin{array}{c}
+K^n \rightarrow K^n \\
+\left\{x_1, x_2, \ldots, x_n\right\} \mapsto\left\{\sum_{j=1}^n f_1\left(\alpha_j\right), \sum_{j=1}^n f_2\left(\alpha_j\right), \ldots, \sum_{j=1}^n f_n\left(\alpha_j\right)\right\}
+\end{array}\right.\)
+,设 $\delta=\left(x_1, x_2, \ldots, x_n\right)^T$, 即坐标变换公式: $\delta=A \delta^{\prime}$, 那么有 $\delta^{\prime}=\left(\frac{\left|B_1\right|}{|A|}, \frac{\left|B_2\right|}{|A|}, \ldots, \frac{\left|B_n\right|}{|A|}\right)^T$</p>
+
+<h4 id="表层意义">表层意义</h4>
+
+<p>也就是说, 克拉默法则的几何理解就是它给出了非退化仿射变换变换后的新坐标公式。有了这个工具, 在做非退化仿射变换的时候就能更方便地求新坐标了。</p>
+
+<h4 id="本质意义">本质意义</h4>
+
+<p>进一步地, 当 $A$ 是一个正交矩阵, 即做的是正交变换（以同向为例），那么有 
+\(\delta^{\prime}=A^{\prime} \delta=\left(\left|B_1\right|,\left|B_2\right|, \ldots,\left|B_n\right|\right)^T\)
+  于是有
+\(\alpha_i \cdot \delta=\left|B_i\right|(i=1,2, \ldots, n)\)</p>
+
+<p>考虑原标架是右手直角标架, 此时等号右边表示 $\delta$ 在第 $\mathrm{i}$个纬度上的分量为“高”, 其他单位坐 标向量为“底”的几何体的“体积”。而“底”的面积为1, 所以这个“体积”就等于“高”。易知等号左边则表示 $\delta$ 在第 $\mathrm{i}$ 个纬度上的分量。</p>
+
+<p>考虑原标架是任意标架，而且$ A$ 是任意可逆矩阵，那么可以类比地理解：一个向量在用一组新向量线性表出时在每个新向量的维度上的分量是以它为“高”、别的新坐标向量为“底”的几何体的体积比上新向量组构成的几何体的体积。</p>
+
+<h3 id="关于证明">关于证明</h3>
+
+<ol>
+  <li>
+    <p>行列式的定义和应用：行列式是一个从数域的$n^2$维向量空间映射到数域自身的函数。在一个数域$F$上，我们可以定义一个行列式$\Delta$如下：</p>
+
+\[\Delta : F^{n^2} \rightarrow F\]
+
+    <p>这个函数在$n$维线性空间$F^n$上是有效的。</p>
+  </li>
+  <li>
+    <p>正交单位化：在一个数域$F$上，我们可以对$n$维线性空间$F^n$的任何基进行正交单位化。这可以把基转换为一个右手直角坐标系。</p>
+  </li>
+  <li>
+    <p>克拉默法则的本质和应用：克拉默法则是一个几何直观的抽象，它在度量线性空间中有效。度量线性空间能表示诸如”面积”、”体积”这样的几何概念，而非度量空间不一定可以。</p>
+  </li>
+  <li>
+    <p>线性方程组与线性空间的关系：线性方程组背后隐含了线性空间的结构，而二维和三维的几何可以帮助我们直观地理解数量关系（高维几何则需要依赖代数来理解）。</p>
+  </li>
+</ol>
+
+<h4 id="结">结</h4>
+
+<p><strong>“克拉默法则的本质是将几何直观抽象到度量线性空间。”</strong></p>
+
+<h2 id="reference">reference</h2>
+
+<p>https://ccjou.wordpress.com/2009/11/10/%E5%85%8B%E6%8B%89%E7%91%AA%E5%85%AC%E5%BC%8F%E7%9A%84%E8%AD%89%E6%98%8E/</p>
+
+<p>https://zhuanlan.zhihu.com/p/57944485</p>
+
+<p>https://zhuanlan.zhihu.com/p/262988664</p>
+
+<p>https://planetmath.org/proofofcramersrule</p>
+
+
+<ul class="taxonomy__index">
+  
+  
+    <li>
+      <a href="#2025">
+        <strong>2025</strong> <span class="taxonomy__count">1</span>
+      </a>
+    </li>
+  
+    <li>
+      <a href="#2024">
+        <strong>2024</strong> <span class="taxonomy__count">4</span>
+      </a>
+    </li>
+  
+    <li>
+      <a href="#2023">
+        <strong>2023</strong> <span class="taxonomy__count">8</span>
+      </a>
+    </li>
+  
+</ul>
+
+
+
+
+  <section id="2025" class="taxonomy__section">
+    <h2 class="archive__subtitle">2025</h2>
+    <div class="entries-list">
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/recursive-problem/" rel="permalink">recursive problem
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          9 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Begging
+
+</p>
+  </article>
+</div>
+
+      
+    </div>
+    <a href="#page-title" class="back-to-top">Back to top &uarr;</a>
+  </section>
+
+  
+
+  <section id="2024" class="taxonomy__section">
+    <h2 class="archive__subtitle">2024</h2>
+    <div class="entries-list">
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/Life-goals-at-30/" rel="permalink">Life goals before the age of 30 (in addition to finding a job)
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">:)
+
+</p>
+  </article>
+</div>
+
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/visa-preparation/" rel="permalink">签证准备材料list
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">记录签证准备材料的list
+
+</p>
+  </article>
+</div>
+
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/how-to-read-mtf-curves.md/" rel="permalink">Notes for ‘How To Read MTF Curves’ article
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          16 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">文章翻译, 阅读, 解读MTF曲线, 笔记总结
+Preface
+
+</p>
+  </article>
+</div>
+
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/master-apply/" rel="permalink">The summary (guide) for DIY master application in 2024 fall
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          10 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+
+</p>
+  </article>
+</div>
+
+      
+    </div>
+    <a href="#page-title" class="back-to-top">Back to top &uarr;</a>
+  </section>
+
+  
+
+  <section id="2023" class="taxonomy__section">
+    <h2 class="archive__subtitle">2023</h2>
+    <div class="entries-list">
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/inner-producted/" rel="permalink">Inner producted 一些问题
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">A record of some simple ideas.
+
+</p>
+  </article>
+</div>
+
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/learning-how-to-learn-powerful-mental-tools-to-help-you-master-tough-subjects/" rel="permalink">learning how to learn powerful mental tools to help you master tough subjects
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          46 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">UCLA online
+learning how to learn powerful mental tools to help you master tough subjects
+
+</p>
+  </article>
+</div>
+
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/CMU-Discrete-mathematics-2001-notes/" rel="permalink">Discrete Mathematics
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">虎头蛇尾…
+
+</p>
+  </article>
+</div>
+
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/Injective,-Surjective-and-Bi-jective/" rel="permalink">Injective, Surjective and bi-jective
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          2 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">A small concept in discrete mathematics
+
+</p>
+  </article>
+</div>
+
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/Lec1-and-lec2-content/" rel="permalink">MIT missing Cour
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          7 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">进度条…(2/8)
+
+</p>
+  </article>
+</div>
+
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/proof-of-Cramer-s-rule/" rel="permalink">Proof of Cramer’s Rule
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">The article contains three proofs.
+
+</p>
+  </article>
+</div>
+
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/elec211pdf/" rel="permalink">ELEC211: Digital Electronics &amp; Microprocessor Systems
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          less than 1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+
+</p>
+  </article>
+</div>
+
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/comp-202/" rel="permalink">ELEC202 Lec 7&amp;8 FM&amp;PM
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          7 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">mainly talk about FM&amp;PM in ELEC202 at Lec 7&amp;8
+
+</p>
+  </article>
+</div>
+
+      
+    </div>
+    <a href="#page-title" class="back-to-top">Back to top &uarr;</a>
+  </section>
+
+  
+
+
+  </div>
+</div>
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-GXFVKNJ25Z"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-GXFVKNJ25Z');
+</script>
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+
+    
+      <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2025 Chia-ch'i. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    <script type="text/javascript" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+
+
+
+  </body>
+</html>
