@@ -1,10 +1,10 @@
 ---
 layout: post
-title: "recursive problem"
+title: "Recursive problem and Thinking Process"
 date: 2025-04-22
 
 ---
-# Begging
+The article contains mistakes and misunderstandings, as it is a record of my own incorrect notes rather than a proper summary document.
 
 # First Module 1 - Arrays, ArrayLists, Recursion
 
