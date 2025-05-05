@@ -1,10 +1,4 @@
 <!doctype html>
-<!--
-  Minimal Mistakes Jekyll Theme 4.24.0 by Michael Rose
-  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
-  Free for personal and commercial use under the MIT license
-  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
--->
 <html lang="en" class="no-js">
   <head>
     <meta charset="utf-8">
@@ -95,6 +89,7 @@
   </head>
 
   <body class="layout--home">
+
     <nav class="skip-links">
   <ul>
     <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
@@ -288,6 +283,47 @@
     
     <h2 class="archive__item-title no_toc" itemprop="headline">
       
+        <a href="/Dot-products%E7%82%B9%E7%A7%AF-and-duality-Chapter-9/" rel="permalink">2025-05-01 Dot products点积 and duality Chapter 9/16
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          12 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">3Blue1Brown
+
+</p>
+  </article>
+</div>
+
+  
+    
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
         <a href="/%E4%BB%8EMatrix-%E4%B9%98%E6%B3%95%E8%AE%A1%E7%AE%97%E5%87%BA%E5%8F%91%E7%9A%84Linear-Algebra/" rel="permalink">Linear Algebra Starting from Matrix Multiplication
 </a>
       
@@ -443,47 +479,6 @@
 </div>
 
   
-    
-
-
-
-<div class="list__item">
-  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
-    
-    <h2 class="archive__item-title no_toc" itemprop="headline">
-      
-        <a href="/Life-goals-at-30/" rel="permalink">Life goals before the age of 30 (in addition to finding a job)
-</a>
-      
-    </h2>
-    
-
-  <p class="page__meta">
-    
-
-    
-
-    
-      
-      
-
-      <span class="page__meta-readtime">
-        <i class="far fa-clock" aria-hidden="true"></i>
-        
-          less than 1 minute read
-        
-      </span>
-    
-  </p>
-
-
-    <p class="archive__item-excerpt" itemprop="description">:)
-
-</p>
-  </article>
-</div>
-
-  
 </div>
 
 
@@ -556,15 +551,25 @@
       </div>
     
 
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-GXFVKNJ25Z"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <!-- MathJax 配置和加载 -->
+    <script>
+      window.MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          displayMath: [['$$', '$$'], ['\\[', '\\]']]
+        }
+      };
+    </script>
+    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
-  gtag('config', 'G-GXFVKNJ25Z');
-</script>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-GXFVKNJ25Z"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-GXFVKNJ25Z');
+    </script>
 
     <div id="footer" class="page__footer">
       <footer>
@@ -603,10 +608,6 @@
 
       </footer>
     </div>
-
-    <script type="text/javascript" async
-  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
-</script>
 
     
   <script src="/assets/js/main.min.js"></script>

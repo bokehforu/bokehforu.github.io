@@ -1,10 +1,4 @@
 <!doctype html>
-<!--
-  Minimal Mistakes Jekyll Theme 4.24.0 by Michael Rose
-  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
-  Free for personal and commercial use under the MIT license
-  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
--->
 <html lang="en" class="no-js">
   <head>
     <meta charset="utf-8">
@@ -97,6 +91,7 @@
   </head>
 
   <body class="layout--post">
+
     <nav class="skip-links">
   <ul>
     <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
@@ -561,13 +556,13 @@ Single tone FM signal
   
     <li>
       <a href="#2025">
-        <strong>2025</strong> <span class="taxonomy__count">4</span>
+        <strong>2025</strong> <span class="taxonomy__count">5</span>
       </a>
     </li>
   
     <li>
       <a href="#2024">
-        <strong>2024</strong> <span class="taxonomy__count">4</span>
+        <strong>2024</strong> <span class="taxonomy__count">3</span>
       </a>
     </li>
   
@@ -585,6 +580,47 @@ Single tone FM signal
   <section id="2025" class="taxonomy__section">
     <h2 class="archive__subtitle">2025</h2>
     <div class="entries-list">
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/Dot-products%E7%82%B9%E7%A7%AF-and-duality-Chapter-9/" rel="permalink">2025-05-01 Dot products点积 and duality Chapter 9/16
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          12 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">3Blue1Brown
+
+</p>
+  </article>
+</div>
+
       
         
 
@@ -878,47 +914,6 @@ Single tone FM signal
 
     <p class="archive__item-excerpt" itemprop="description">文章翻译, 阅读, 解读MTF曲线, 笔记总结
 Preface
-
-</p>
-  </article>
-</div>
-
-      
-        
-
-
-
-<div class="list__item">
-  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
-    
-    <h2 class="archive__item-title no_toc" itemprop="headline">
-      
-        <a href="/master-apply/" rel="permalink">The summary (guide) for DIY master application in 2024 fall
-</a>
-      
-    </h2>
-    
-
-  <p class="page__meta">
-    
-
-    
-
-    
-      
-      
-
-      <span class="page__meta-readtime">
-        <i class="far fa-clock" aria-hidden="true"></i>
-        
-          10 minute read
-        
-      </span>
-    
-  </p>
-
-
-    <p class="archive__item-excerpt" itemprop="description">
 
 </p>
   </article>
@@ -1288,15 +1283,25 @@ learning how to learn powerful mental tools to help you master tough subjects
       </div>
     
 
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-GXFVKNJ25Z"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <!-- MathJax 配置和加载 -->
+    <script>
+      window.MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          displayMath: [['$$', '$$'], ['\\[', '\\]']]
+        }
+      };
+    </script>
+    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
-  gtag('config', 'G-GXFVKNJ25Z');
-</script>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-GXFVKNJ25Z"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-GXFVKNJ25Z');
+    </script>
 
     <div id="footer" class="page__footer">
       <footer>
@@ -1335,10 +1340,6 @@ learning how to learn powerful mental tools to help you master tough subjects
 
       </footer>
     </div>
-
-    <script type="text/javascript" async
-  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
-</script>
 
     
   <script src="/assets/js/main.min.js"></script>

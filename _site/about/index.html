@@ -1,10 +1,4 @@
 <!doctype html>
-<!--
-  Minimal Mistakes Jekyll Theme 4.24.0 by Michael Rose
-  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
-  Free for personal and commercial use under the MIT license
-  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
--->
 <html lang="en" class="no-js">
   <head>
     <meta charset="utf-8">
@@ -93,6 +87,7 @@
   </head>
 
   <body class="layout--single">
+
     <nav class="skip-links">
   <ul>
     <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
@@ -211,13 +206,6 @@
 
 <p>HEY EVERYONE! I’M A FINAL-YEAR STUDENT BASED IN LIVERPOOL, GETTING READY TO WRAP UP MY STUDIES IN 2024. MY FOCUS HAS BEEN ON COMPUTER SCIENCE AND ELECTRICAL ENGINEERING IN U OF LIV MAIN CITY CAMPUS. I’M PARTICULARLY EXCITED ABOUT MY NEXT STEP: JOINING GEORGIA TECH’S CSE PROGRAM. LIVERPOOL HAS SHAPED ME WITH ITS VIBRANT ENVIRONMENT &amp; CULTURE, AND I CAN’T WAIT TO SEE WHERE THIS JOURNEY TAKES ME NEXT.</p>
 
-<p>MANY MANY THX FOR XJTLU AND U OF LIV.</p>
-
-<div style="text-align: center;">
-   <img src="../assets/images/about/po.png" alt="po" style="zoom:66%;" />
-</div>
-<p><em><font color="grey"><center>Thx my friend Zfei taking this photo for me</center></font></em></p>
-
 <p><br /></p>
 
 <p>I AM TRULY GRATEFUL FOR ALL THE LUCKY OUTCOMES OF THE PAST, CHEERS TO THE FUTURE :)</p>
@@ -265,15 +253,25 @@
       </div>
     
 
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-GXFVKNJ25Z"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <!-- MathJax 配置和加载 -->
+    <script>
+      window.MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          displayMath: [['$$', '$$'], ['\\[', '\\]']]
+        }
+      };
+    </script>
+    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
-  gtag('config', 'G-GXFVKNJ25Z');
-</script>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-GXFVKNJ25Z"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-GXFVKNJ25Z');
+    </script>
 
     <div id="footer" class="page__footer">
       <footer>
@@ -312,10 +310,6 @@
 
       </footer>
     </div>
-
-    <script type="text/javascript" async
-  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
-</script>
 
     
   <script src="/assets/js/main.min.js"></script>
