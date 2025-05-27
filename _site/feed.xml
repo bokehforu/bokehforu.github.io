@@ -1,4 +1,530 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.5">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2025-05-04T09:11:20-04:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Chia-ch’i‘s Web page</title><subtitle> </subtitle><author><name>Chia-ch&apos;i</name></author><entry><title type="html">2025-05-01 Dot products点积 and duality Chapter 9/16</title><link href="http://localhost:4000/Dot-products%E7%82%B9%E7%A7%AF-and-duality-Chapter-9/" rel="alternate" type="text/html" title="2025-05-01 Dot products点积 and duality Chapter 9/16" /><published>2025-05-01T00:00:00-04:00</published><updated>2025-05-01T00:00:00-04:00</updated><id>http://localhost:4000/Dot%20products%E7%82%B9%E7%A7%AF%20and%20duality%20Chapter%209</id><content type="html" xml:base="http://localhost:4000/Dot-products%E7%82%B9%E7%A7%AF-and-duality-Chapter-9/"><![CDATA[<p>3Blue1Brown</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.5">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2025-05-27T13:41:20+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Chia-ch’i‘s Web page</title><subtitle> </subtitle><author><name>Chia-ch&apos;i</name></author><entry><title type="html">2025-05-23 Leetcode 146.LRU 5433字记录思考的过程</title><link href="http://localhost:4000/146.-lru/" rel="alternate" type="text/html" title="2025-05-23 Leetcode 146.LRU 5433字记录思考的过程" /><published>2025-05-23T00:00:00+08:00</published><updated>2025-05-23T00:00:00+08:00</updated><id>http://localhost:4000/146.%20lru</id><content type="html" xml:base="http://localhost:4000/146.-lru/"><![CDATA[<p><em>使用 GPT refine 了文章</em></p>
+
+<p>2025-05-25</p>
+
+<p>读完题目, 我们需要设计一个支持以下操作的数据结构：<code class="language-plaintext highlighter-rouge">get</code> 和 <code class="language-plaintext highlighter-rouge">put</code>，并且这两个操作都要在 $O(1)$ 时间内完成。为了实现这一点，我们结合使用了 <strong>哈希表（dict）</strong> 和 <strong>双向链表（Doubly Linked List, DLList）</strong>, 这里补充的时候, 刚做这个题目的难点的, 这两个操作同时还要实现在时序上的 order.</p>
+
+<p><strong>为什么需要链表, 而且是 DDList</strong>？单用 Python 中的 <code class="language-plaintext highlighter-rouge">dict</code> 虽然查找快，但无法保持数据的访问顺序；而使用 <code class="language-plaintext highlighter-rouge">list</code> 虽然可以维护顺序，却无法在 $O(1)$ 时间内删除任意节点。而另外一个基础结构, 链表, 实现一个 stack 的时候, 我们在头结尾上添加和删除, 这就都是 O1 的,但是这个时候我们想到了, 我们这个题的逻辑在删除上是也是要 O1 的, 而且应该是从 tail 上删除, 这相当于实现了一个可以前进后出的队列, 但是链表的尾部删除是是 On 的, 就算我们有一个 tail 指针也是一样, 因为我们不知道 tail 这个 node 的前面是什么位置是哪个 node, tail 在被删除之后, 要重新遍历一遍找到新的 tail, , 除非我们在访问的一个节点的时候, 我们可以知道这个 node 的前面是是哪个节点, 方法呼之欲出了—- 使用 <strong>双向链表</strong> 来存储所有的缓存节点，并维护最近访问的顺序。最近使用的节点放在链表头部，最久未使用的节点在链表尾部；当容量超限时，我们就移除尾部节点。</p>
+
+<p>然后, 我们想一下如何建立链表, 简单, 使用一个 node class 就行了, 于是我们开了一个新的 class, 如下</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Node</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">key</span> <span class="o">=</span> <span class="n">key</span> <span class="c1"># why? 
+</span>        <span class="bp">self</span><span class="p">.</span><span class="n">val</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">prev</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="p">.</span><span class="nb">next</span> <span class="o">=</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>这里的关键点是：<strong>为什么节点中还要记录 <code class="language-plaintext highlighter-rouge">self.key</code>？</strong>
+这是因为我们在删除最久未使用节点的时候（也就是链表尾部节点），需要从哈希表中同步删除对应的项。我们能通过链表找到这个节点 <code class="language-plaintext highlighter-rouge">node</code>，但要从哈希表中 <code class="language-plaintext highlighter-rouge">O(1)</code> 时间地删除 <code class="language-plaintext highlighter-rouge">table[key]</code>，就必须知道它对应的 key。</p>
+
+<blockquote>
+  <p>你可能会问，为什么不能直接使用这个 node 本身作为哈希表的 key 呢？这是 Python 和 Java 的一个差异。在 Python 中，字典的 key 默认是通过对象的 id（即地址）来计算的 hash 值，除非手动重写 <code class="language-plaintext highlighter-rouge">__hash__</code> 和 <code class="language-plaintext highlighter-rouge">__eq__</code> 方法。而且即使两个节点 <code class="language-plaintext highlighter-rouge">Node(key=1, val=100)</code> 看起来值一样，它们的实例地址是不同的。因此不能指望用节点本身作为哈希表的 key 来查找。</p>
+</blockquote>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">a</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">a</span> <span class="o">==</span> <span class="n">b</span><span class="p">)</span>  <span class="c1"># False
+</span></code></pre></div></div>
+
+<blockquote>
+  <p>这意味着，即使两个 node 的内容一样，它们不是同一个 key。所以我们不能用 node 当 key，只能用原始输入的 <code class="language-plaintext highlighter-rouge">key</code>。</p>
+</blockquote>
+
+<p>从功能逻辑上再解释一次：</p>
+
+<ul>
+  <li>哈希表 <code class="language-plaintext highlighter-rouge">table</code> 提供 $O(1)$ 的 key 到节点的映射。</li>
+  <li>双向链表记录访问顺序，支持 $O(1)$ 的插入和删除操作。</li>
+  <li>当我们访问一个 key（<code class="language-plaintext highlighter-rouge">get</code> 或 <code class="language-plaintext highlighter-rouge">put</code> 更新已有 key）时，我们需要：
+    <ol>
+      <li>在哈希表中快速找到对应的 node。</li>
+      <li>把这个 node 移到链表的头部（代表最近访问）。</li>
+    </ol>
+  </li>
+  <li>当容量满了时：
+    <ol>
+      <li>我们从链表尾部拿到最旧的节点 <code class="language-plaintext highlighter-rouge">node</code>。</li>
+      <li>通过 <code class="language-plaintext highlighter-rouge">node.key</code> 在哈希表中删除对应条目。</li>
+    </ol>
+  </li>
+</ul>
+
+<p>所以我们必须在每个 <code class="language-plaintext highlighter-rouge">Node</code> 中保留 <code class="language-plaintext highlighter-rouge">self.key</code>，因为这是唯一能让我们在 $O(1)$ 时间内，从哈希表中同步删除那一项的手段。</p>
+
+<p>这个结构的设计核心就是：<br />
+**哈希表用于快速定位，双向链表用于维护访问顺序。两者结合才能实现整体的 $O(1)$ 性能目标。</p>
+
+<p>更加高屋建瓴地讲, 从 <a href="https://xiaobot.net/post/1354728a-277d-4429-a163-2212ef171a3a">Infra 面试之数据结构六：LRU</a> 文章来说, 解这道题的关键是如何管理复杂度, 把这个难的问题拆开来(难, 只是因为拆的不够简单)
+宏观上，代码组织思路：</p>
+<ol>
+  <li>将该数据结构分为<strong>数据和索引</strong>两部分</li>
+  <li>数据用链表组织，可动态维护时间先后。可保证替换时间复杂度为 $O(1)$</li>
+  <li>索引用哈希表组织，用于快速查找删除。可保证增删时间复杂度为 $O(1)$ 
+这种数据、索引分离考虑的思想，借鉴数据库的聚集索引|和二级索引.</li>
+</ol>
+
+<p>当然还有题目实现上的细节需要考虑
+OK, 我们继续
+从下面的这个题目中的空代码出发</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">LRUCache</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">capacity</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        
+
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        
+
+    <span class="k">def</span> <span class="nf">put</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        
+
+
+<span class="c1"># Your LRUCache object will be instantiated and called as such:
+# obj = LRUCache(capacity)
+# param_1 = obj.get(key)
+# obj.put(key,value
+</span>
+</code></pre></div></div>
+
+<h1 id="original-分步骤部分-这个部分用-gpt-gemini-refine-之后发现变化特别大-保留原始部分了">original 分步骤部分 (这个部分用 GPT Gemini refine 之后发现变化特别大, 保留原始部分了)</h1>
+<p>现在我们已经写好了, 这里除了一些算法上的实现细节, 其实有两种大的逻辑, 实现同样的功能,</p>
+<ol>
+  <li>是在比对了有 key 之后使用原来的内存地址上的点, 进行 detach, 再使用同一个移动到最前面的位置,</li>
+  <li>是在对比有了 key 之后, 直接删除, 然后新创建一个 node 连在 head 后面, 这样会使用更加多的内存开销, 但是实现上更加简单, 而第二种其实代码更加复杂来避免反复的新建, 使用大量的内存, 所以我觉得第一种是第二种的优化, 所以我先写第二种, 再从优化的角度写第一种</li>
+</ol>
+
+<p>OK, 我们现在有, <font color="red">这里有一个初始值设定的问题, 有些会写 key = None 是什么的</font> , 继续写下面的代码,</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">node</span><span class="p">:</span>
+	<span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">key</span><span class="p">,</span><span class="n">val</span><span class="p">):</span>
+		<span class="bp">self</span><span class="p">.</span><span class="n">key</span> <span class="o">=</span> <span class="n">key</span>
+		<span class="bp">self</span><span class="p">.</span><span class="n">val</span> <span class="o">=</span> <span class="n">val</span>
+		<span class="bp">self</span><span class="p">.</span><span class="n">prev</span> <span class="o">=</span> <span class="bp">None</span>
+		<span class="bp">self</span><span class="p">.</span><span class="nb">next</span> <span class="o">=</span> <span class="bp">None</span>
+<span class="k">class</span> <span class="nc">LRUCache</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">capacity</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    	<span class="c1"># table
+</span>    	<span class="bp">self</span><span class="p">.</span><span class="n">table</span> <span class="o">=</span> <span class="p">{}</span>
+        
+        <span class="c1"># DDlist
+</span>        <span class="bp">self</span><span class="p">.</span><span class="n">head</span> <span class="o">=</span> <span class="n">node</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span><span class="bp">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">tail</span> <span class="o">=</span> <span class="n">node</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">tail</span><span class="p">.</span><span class="n">prev</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">head</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">head</span><span class="p">.</span><span class="nb">next</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">tail</span>
+        
+        <span class="c1"># input capacity
+</span>        <span class="bp">self</span><span class="p">.</span><span class="n">capacity</span> <span class="o">=</span> <span class="n">capacity</span>
+        
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        
+
+    <span class="k">def</span> <span class="nf">put</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+</code></pre></div></div>
+<p>OK, 继续是初始化的步骤, 在这个位置想的是什么呢, 第一个是我们要 table , 第二个是我们要有链表啊, OK, 这就是所有了, 当然还有一个在使用链表做题时候一个 tricky 的地方, 就是
+OK,在写了之后, 要继续想, 就是我们具体其实要操作的是数据结构本身, 那么, 其实, 这个要在上面画什么的决策树其实是 table 的添加和删除, 还有链表的添加和删除, 但是字典的添加和删除很简单, python 中都已经有接口实现了, 这时候注意, 我们的链表是我们本身创建的结构, 这个删除和添加的逻辑 python 并没有给我们,</p>
+
+<blockquote>
+  <p><strong>很多题解都写在 class LRUCache 下,</strong> 我的疑问是能不能写在 node 中, 好像是可以的, <code class="language-plaintext highlighter-rouge">_delete</code> 操作删除 node, 哦哦哦不行? class 中的方法, 可以删除自己吗, 应该可以吧, 再想想插入的方法, 我一般要插入的话要干什么, 都是更新在最新的位置, 那么就是说, 好像和 table 也没什么关联, 那么, 问题就剩下, 如果, 写在本身的话, 插入和删除的输入可不可以是自己, 应该可以是自己的吧, 因为递归的输入就是自己,</p>
+</blockquote>
+
+<p>OK 上面的问题的产生是因为我把 <code class="language-plaintext highlighter-rouge">class node</code> 和 <code class="language-plaintext highlighter-rouge">class doublelinkedlist</code> 弄混淆了, 也就是说, 其实这里我们的面向对象编程也省略掉了要创造 doublelinkedlist 这一步, 所以这里这个问题会出现是因为, 我没有思考过的. 继续, 我们先在 <code class="language-plaintext highlighter-rouge">class LRUCache</code> 中写我们的方法</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">LRUCache</span><span class="p">:</span>
+	<span class="s">'''
+	ignore upper codes
+	'''</span>
+	
+	<span class="k">def</span> <span class="nf">_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">node</span><span class="p">):</span>
+		
+	<span class="k">def</span> <span class="nf">_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">node</span><span class="p">):</span>
+		
+</code></pre></div></div>
+<p>其中删除的逻辑很简单, 就交给 python 的内存回收机制就好了</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">node</span><span class="p">):</span>
+	<span class="c1"># node.prev
+</span>	<span class="n">node</span><span class="p">.</span><span class="n">prev</span><span class="p">.</span><span class="nb">next</span> <span class="o">=</span> <span class="n">node</span><span class="p">.</span><span class="nb">next</span>
+	<span class="c1"># node.next 
+</span>	<span class="n">node</span><span class="p">.</span><span class="nb">next</span><span class="p">.</span><span class="n">prev</span> <span class="o">=</span> <span class="n">node</span><span class="p">.</span><span class="n">prev</span>
+</code></pre></div></div>
+<p>但是,这里的 ` _update<code class="language-plaintext highlighter-rouge"> 要使用 key 吗, 不清楚, 但是可以先写, 首先理解这个逻辑是, 如果存在在 DLList 中, 就 ... 如果不在那么就可以直接加在 head 的后面, OK, 从这个逻辑出发, 我们的 </code> _update` 方法是需要 key 的, 不然, 如何用 table $O(1)$ 时间地来判断重复呢? (这里也说明这个方法要在)</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span> <span class="c1"># 错了吗
+</span></code></pre></div></div>
+
+<p>所以我们认为这个 <code class="language-plaintext highlighter-rouge">_update</code> 方法需要我们的 key, 在没有做这个题之前, 我觉得我确实想不出来, 因为这些关系都是交织的, 很难一下子直接分割到最小, 所以写成 <code class="language-plaintext highlighter-rouge">def _update(self, node, key): </code> 哦是这样吗? 错了, 只是更新一个 node, 但是 key 不更新的话, 那么其实我们也不需要这个 key 了, OK,</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span> <span class="c1"># 对的?
+</span></code></pre></div></div>
+
+<p>其实, 我现在感觉没有这个对错, 问题的关键在于这个 key 的作用, 是什么作用, 要不要想不想切割到最小, 这个感觉, OK, 那先按照现在的思路继续写
+然后想一下, 这个方法要干什么, 现在排除掉了检测, 其实就是什么呢, 就是要实现了一个链表的插入节点的操作, 一共有三个节点的状态应该考虑, 分别是 head, head.next, node</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+
+	<span class="c1"># 从 head位置, 插入
+</span>	<span class="n">headnxt</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">head</span><span class="p">.</span><span class="nb">next</span>
+	<span class="bp">self</span><span class="p">.</span><span class="n">head</span><span class="p">.</span><span class="nb">next</span> <span class="o">=</span> <span class="n">node</span>
+	
+	<span class="c1"># node的前后
+</span>	<span class="n">node</span><span class="p">.</span><span class="n">prev</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">head</span>
+	<span class="n">node</span><span class="p">.</span><span class="nb">next</span> <span class="o">=</span> <span class="n">headnxt</span>
+	
+	<span class="c1"># 原先的head后面的node的prev要接上新的node
+</span>	<span class="n">headnxt</span><span class="p">.</span><span class="n">prev</span> <span class="o">=</span> <span class="n">node</span>
+</code></pre></div></div>
+
+<p>OK, 那么现在就剩下题目原来的 put 和 get 方法了, 现在, 想一想这个方法要干什么, get 是要检查有没有(注意更新最近使用), 然后 put 是要完成插入的逻辑, 同时要注意更新最近的逻辑, 同时要注意整体的 size, 因为这个 cache 有 capacity. 
+get 比较简单, 先写 get, 大的框架是有 or 没有的逻辑, 这是很简单想到的,</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+	<span class="c1"># 有
+</span>	<span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">.</span><span class="n">table</span><span class="p">:</span>
+	
+	<span class="c1"># 没有
+</span>	<span class="k">else</span><span class="p">:</span>
+		<span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+</code></pre></div></div>
+
+<p>OK, 那么继续实现一下</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+	<span class="c1"># 有
+</span>	<span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">.</span><span class="n">table</span><span class="p">:</span>
+		
+		<span class="c1"># 返回那个对应table[key]
+</span>		<span class="c1"># 要在前面更新
+</span>	<span class="c1"># 没有
+</span>	<span class="k">else</span><span class="p">:</span>
+		<span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+	<span class="c1"># 有
+</span>	<span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">.</span><span class="n">table</span><span class="p">:</span>
+		<span class="c1"># 创建
+</span>		<span class="n">tempnode</span> <span class="o">=</span> <span class="n">node</span><span class="p">(</span><span class="n">key</span><span class="p">,</span><span class="bp">self</span><span class="p">.</span><span class="n">table</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+		
+		<span class="c1"># 删除
+</span>		<span class="bp">self</span><span class="p">.</span><span class="n">_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">table</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+		<span class="k">del</span> <span class="bp">self</span><span class="p">.</span><span class="n">table</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="c1"># 要吗?
+</span>		<span class="c1"># 新建?
+</span>		<span class="bp">self</span><span class="p">.</span><span class="n">_update</span><span class="p">(</span><span class="n">tempnode</span><span class="p">)</span>
+		<span class="bp">self</span><span class="p">.</span><span class="n">table</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">tempnode</span> <span class="c1"># 其实前面不要删除更新一下就行了
+</span>		<span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">table</span><span class="p">[</span><span class="n">key</span><span class="p">].</span><span class="n">val</span>
+	<span class="c1"># 没有
+</span>	<span class="k">else</span><span class="p">:</span>
+		<span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+</code></pre></div></div>
+
+<p>那么还剩下一个 put 的方法了, 想一想逻辑,</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">put</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+</code></pre></div></div>
+<p>把决策树都画出来,</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">输入key</span>
+	<span class="n">如果在其中有key的话</span>
+		<span class="n">删除原先的node在链表和table中</span>
+		<span class="n">添加这个新的node到head后面</span>
+		<span class="n">更新table</span>
+	<span class="n">如果在其中没有key的话</span>
+		<span class="n">现在的node放在head后面</span>
+		<span class="n">table更新一下</span>
+	<span class="n">最后检查size</span><span class="p">,</span> <span class="n">如果超过capacity就从tail开始删除一个</span>
+	
+</code></pre></div></div>
+
+<p>写, 这里要注意 table 和链表删除的顺序, 应该先从链表上删除, 因为使用 table 可以用 $O(1)$ 的时间访问对应的节点, 但是如果先在 table 上把这个节点删除掉的话, 那么我们会丢失这个用 key 快速访问的能力, 但是相反的, 我们的删除逻辑本身运行后, 不会影响我们 table 的逻辑, 因为我们是改变 key 对应的 node 的前后连接关系, 而不是说让这个 node 本身变成 None, 但是好像即使是变成 None 也没什么关系, OK, 这里就说完了</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">put</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+	<span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">.</span><span class="n">table</span><span class="p">:</span>
+		<span class="n">tempNode</span> <span class="o">=</span> <span class="n">node</span><span class="p">(</span><span class="n">key</span><span class="p">,</span><span class="n">value</span><span class="p">)</span>
+		<span class="bp">self</span><span class="p">.</span><span class="n">_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">table</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+		<span class="bp">self</span><span class="p">.</span><span class="n">_update</span><span class="p">(</span><span class="n">tempNode</span><span class="p">)</span>
+		
+	<span class="k">else</span><span class="p">:</span> <span class="c1"># no key in self.table
+</span>		<span class="n">tempNode</span> <span class="o">=</span> <span class="n">node</span><span class="p">(</span><span class="n">key</span><span class="p">,</span><span class="n">value</span><span class="p">)</span>
+		<span class="bp">self</span><span class="p">.</span><span class="n">_update</span><span class="p">(</span><span class="n">tempNode</span><span class="p">)</span>
+		<span class="bp">self</span><span class="p">.</span><span class="n">table</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">tempNode</span>
+	
+	<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">table</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="p">.</span><span class="n">capacity</span><span class="p">:</span>
+		<span class="n">delnode</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">tail</span><span class="p">.</span><span class="n">prev</span>
+		
+		<span class="c1"># del 
+</span>		<span class="bp">self</span><span class="p">.</span><span class="n">_delete</span><span class="p">(</span><span class="n">delnode</span><span class="p">)</span>
+		<span class="k">del</span> <span class="bp">self</span><span class="p">.</span><span class="n">table</span><span class="p">[</span><span class="n">delnode</span><span class="p">.</span><span class="n">key</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>OK 现在都写完了, 那么, 整体的全部代码如下,</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">node</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">key</span> <span class="o">=</span> <span class="n">key</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">val</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">prev</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="p">.</span><span class="nb">next</span> <span class="o">=</span> <span class="bp">None</span>
+
+<span class="k">class</span> <span class="nc">LRUCache</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">capacity</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="c1"># table
+</span>        <span class="bp">self</span><span class="p">.</span><span class="n">table</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1"># DLList
+</span>        <span class="bp">self</span><span class="p">.</span><span class="n">head</span> <span class="o">=</span> <span class="n">node</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">tail</span> <span class="o">=</span> <span class="n">node</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">tail</span><span class="p">.</span><span class="n">prev</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">head</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">head</span><span class="p">.</span><span class="nb">next</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">tail</span>
+
+        <span class="c1"># input capacity
+</span>        <span class="bp">self</span><span class="p">.</span><span class="n">capacity</span> <span class="o">=</span> <span class="n">capacity</span>
+
+    <span class="k">def</span> <span class="nf">_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="n">node</span><span class="p">.</span><span class="n">prev</span><span class="p">.</span><span class="nb">next</span> <span class="o">=</span> <span class="n">node</span><span class="p">.</span><span class="nb">next</span>
+        <span class="n">node</span><span class="p">.</span><span class="nb">next</span><span class="p">.</span><span class="n">prev</span> <span class="o">=</span> <span class="n">node</span><span class="p">.</span><span class="n">prev</span>
+
+    <span class="k">def</span> <span class="nf">_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="n">headnxt</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">head</span><span class="p">.</span><span class="nb">next</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">head</span><span class="p">.</span><span class="nb">next</span> <span class="o">=</span> <span class="n">node</span>
+        <span class="n">node</span><span class="p">.</span><span class="n">prev</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">head</span>
+        <span class="n">node</span><span class="p">.</span><span class="nb">next</span> <span class="o">=</span> <span class="n">headnxt</span>
+        <span class="n">headnxt</span><span class="p">.</span><span class="n">prev</span> <span class="o">=</span> <span class="n">node</span>
+
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="c1"># 有key的情况下
+</span>        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">.</span><span class="n">table</span><span class="p">:</span>
+            <span class="c1"># 创建
+</span>            <span class="n">tempnode</span> <span class="o">=</span> <span class="n">node</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="bp">self</span><span class="p">.</span><span class="n">table</span><span class="p">[</span><span class="n">key</span><span class="p">].</span><span class="n">val</span><span class="p">)</span>
+
+            <span class="c1"># 删除
+</span>            <span class="bp">self</span><span class="p">.</span><span class="n">_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">table</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+            <span class="c1"># del self.table[key]  # 不需要删除，table 直接覆盖
+</span>
+            <span class="c1"># 新建并更新
+</span>            <span class="bp">self</span><span class="p">.</span><span class="n">_update</span><span class="p">(</span><span class="n">tempnode</span><span class="p">)</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">table</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">tempnode</span>
+
+            <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">table</span><span class="p">[</span><span class="n">key</span><span class="p">].</span><span class="n">val</span>
+        <span class="c1"># 没有key的情况下
+</span>        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+
+    <span class="k">def</span> <span class="nf">put</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">.</span><span class="n">table</span><span class="p">:</span>
+            <span class="n">tempNode</span> <span class="o">=</span> <span class="n">node</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">table</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">_update</span><span class="p">(</span><span class="n">tempNode</span><span class="p">)</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">table</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">tempNode</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># no key in self.table
+</span>            <span class="n">tempNode</span> <span class="o">=</span> <span class="n">node</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">_update</span><span class="p">(</span><span class="n">tempNode</span><span class="p">)</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">table</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">tempNode</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">table</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="p">.</span><span class="n">capacity</span><span class="p">:</span>
+            <span class="n">delnode</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">tail</span><span class="p">.</span><span class="n">prev</span>
+
+            <span class="c1"># del
+</span>            <span class="bp">self</span><span class="p">.</span><span class="n">_delete</span><span class="p">(</span><span class="n">delnode</span><span class="p">)</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="p">.</span><span class="n">table</span><span class="p">[</span><span class="n">delnode</span><span class="p">.</span><span class="n">key</span><span class="p">]</span>
+
+</code></pre></div></div>
+
+<p>对于代码本身的优化, 这里的一个细节和 two sum 题很像, 就我感觉是 code 层面上的剪枝, 对于 put 方法而言, 很容易的就看到, 在 <code class="language-plaintext highlighter-rouge">self.table</code> 中在判断完是否有 key 后, 这个条件判断中, 每一个子部分, 都有, <code class="language-plaintext highlighter-rouge">建立 tempNode</code>, 然后是因为刚刚存入, 所以要更新到 <code class="language-plaintext highlighter-rouge">head</code> 后, 放置到最新的位置,这都是合理的, 哦那其实, 我们有代码重复在了一个两个不同的地方, 那么只要提出来就好了</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">put</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+	<span class="c1"># 想什么时候要额外, 就是有key的时候, OK
+</span>	<span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">.</span><span class="n">table</span><span class="p">:</span>
+		<span class="bp">self</span><span class="p">.</span><span class="n">_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">table</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+	<span class="c1"># 合并了
+</span>	<span class="n">tempNode</span> <span class="o">=</span> <span class="n">node</span><span class="p">(</span><span class="n">key</span><span class="p">,</span><span class="n">value</span><span class="p">)</span>
+	
+	
+	<span class="bp">self</span><span class="p">.</span><span class="n">table</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">tempNode</span> <span class="c1"># table
+</span>	<span class="bp">self</span><span class="p">.</span><span class="n">_update</span><span class="p">(</span><span class="n">tempNode</span><span class="p">)</span><span class="c1"># 更新到最新
+</span>	
+	<span class="c1"># size检查
+</span>	<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">table</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="p">.</span><span class="n">capacity</span><span class="p">:</span>
+		<span class="n">del_target</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">tail</span><span class="p">.</span><span class="n">prev</span> <span class="c1"># del_target 
+</span>		<span class="bp">self</span><span class="p">.</span><span class="n">_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">table</span><span class="p">[</span><span class="n">del_target</span><span class="p">.</span><span class="n">key</span><span class="p">])</span>
+		<span class="k">del</span> <span class="bp">self</span><span class="p">.</span><span class="n">table</span><span class="p">[</span><span class="n">del_target</span><span class="p">.</span><span class="n">key</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>OK, 在这个部分写完之后, 我们可以发现, 我们不需要对于 ` put<code class="language-plaintext highlighter-rouge"> 方法和 </code>get` 方法在每一步都建立一个新的 node, 在创建一个 node 的时候, 会在计算机上 grab 一个新的内存地址, 然后, 相当于 put 和 get 方法都需要频繁的内存操作,</p>
+<blockquote>
+  <p><strong>deepseek- 14b 分析</strong>
+比如 malloc 和 free 或者垃圾回收的压力。此外，当缓存容量达到上限时，需要替换掉旧
+的节点，这时候如果一直有新的节点被插入，老节点可能已经被移除或仍在链表中，这
+可能会导致一些问题，比如内存泄漏或者其他逻辑错误。
+   -
+2第二种方法 <strong>优点</strong>：实现相对直接，不需要复杂的指针调整。<strong>缺点</strong>：每次访问都创建新节点，导致更多的内存分配和释放操作，可能影响性能。此外，管理旧节点的引用可能会增加代码复杂度。</p>
+</blockquote>
+
+<ol>
+  <li><strong>建立新节点的影响</strong>：
+    <ul>
+      <li><strong>内存开销</strong>：频繁的新建会导致更多的内存分配，增加了垃圾回收或内存管理
+的压力。</li>
+      <li><strong>性能影响</strong>：内存分配操作可能成为性能瓶颈，尤其是在高并发场景下。</li>
+    </ul>
+  </li>
+</ol>
+
+<p>OK 现在如果我们只是操作原来在内存上已经建立的节点的话, 那么我们只是用原来已经被创建的对象, 这样可以大幅减小使用内存的开销.
+一开始我以为只需要改变 <code class="language-plaintext highlighter-rouge">put</code> 方法和 ` get<code class="language-plaintext highlighter-rouge"> 方法, 但是现在我感觉 </code>_update`  方法也应该被更新</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">LRUCache</span><span class="p">:</span>
+    <span class="err">···</span> 
+    <span class="n">ignoring</span>
+    <span class="err">···</span>
+    <span class="k">def</span> <span class="nf">_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+    	<span class="n">node</span><span class="p">.</span><span class="n">prev</span><span class="p">.</span><span class="nb">next</span> <span class="o">=</span> <span class="n">node</span><span class="p">.</span><span class="nb">next</span>
+    	<span class="n">node</span><span class="p">.</span><span class="nb">next</span><span class="p">.</span><span class="n">prev</span> <span class="o">=</span> <span class="n">node</span><span class="p">.</span><span class="n">prev</span>
+    	
+	<span class="k">def</span> <span class="nf">_add_to_after_head</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">node</span><span class="p">):</span>
+		
+		<span class="n">temp_pointer</span> <span class="o">=</span> <span class="n">node</span>
+		
+		<span class="c1"># head
+</span>		<span class="n">original_head_nxt</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">head</span><span class="p">.</span><span class="nb">next</span>
+		<span class="bp">self</span><span class="p">.</span><span class="n">head</span><span class="p">.</span><span class="nb">next</span> <span class="o">=</span> <span class="n">temp_pointer</span>
+		
+		<span class="c1"># node(temp_pointer)
+</span>		<span class="n">temp_pointer</span><span class="p">.</span><span class="n">prev</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">head</span>
+		<span class="n">temp_pointer</span><span class="p">.</span><span class="nb">next</span> <span class="o">=</span> <span class="n">original_head_nxt</span>
+		
+		<span class="c1"># original_head_nxt
+</span>		<span class="n">original_head_nxt</span><span class="p">.</span><span class="n">prev</span> <span class="o">=</span> <span class="n">temp_pointer</span>
+		
+	<span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span> 
+		<span class="c1"># 剪枝
+</span>		<span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">.</span><span class="n">table</span><span class="p">:</span>
+			<span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+		<span class="c1"># key in table
+</span>		<span class="n">temp_pointer</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">table</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+		<span class="c1"># update logic
+</span>		<span class="bp">self</span><span class="p">.</span><span class="n">_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">table</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+		<span class="bp">self</span><span class="p">.</span><span class="n">_add_to_after_head</span><span class="p">(</span><span class="n">temp_pointer</span><span class="p">)</span> <span class="c1"># self._move_to_after_head(self.table[key]) both OK ?
+</span>		
+		<span class="c1"># table 不需要动, only 节点的联系在变化就可以了
+</span>		<span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">table</span><span class="p">[</span><span class="n">key</span><span class="p">].</span><span class="n">val</span>
+	
+	<span class="k">def</span> <span class="nf">put</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+		
+
+</code></pre></div></div>
+
+<p>对于 put 方法而言, 我们还是按照原始的 flow 就好了</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">put</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+	<span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">.</span><span class="n">table</span><span class="p">:</span>
+		<span class="n">newNode</span> <span class="o">=</span> <span class="n">node</span><span class="p">(</span><span class="n">key</span><span class="p">,</span><span class="n">value</span><span class="p">)</span>
+		
+		<span class="bp">self</span><span class="p">.</span><span class="n">_add_to_after_head</span><span class="p">(</span><span class="n">newNode</span><span class="p">)</span>
+		<span class="bp">self</span><span class="p">.</span><span class="n">table</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">newNode</span>
+	<span class="k">else</span><span class="p">:</span> <span class="c1"># key in table 
+</span>		<span class="c1">#dict value 更新
+</span>		<span class="bp">self</span><span class="p">.</span><span class="n">table</span><span class="p">[</span><span class="n">key</span><span class="p">].</span><span class="n">val</span> <span class="o">=</span> <span class="n">value</span> <span class="c1"># 
+</span>		<span class="c1"># 删除
+</span>			
+		<span class="n">temp_pointer</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">table</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>  <span class="c1"># 指针
+</span>		<span class="bp">self</span><span class="p">.</span><span class="n">_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">table</span><span class="p">[</span><span class="n">key</span><span class="p">])</span> <span class="c1"># 原先断掉
+</span>		<span class="c1"># 更新
+</span>		<span class="bp">self</span><span class="p">.</span><span class="n">_add_to_after_head</span><span class="p">(</span><span class="n">temp_pointer</span><span class="p">)</span> <span class="c1"># 放到新位置
+</span>		
+	<span class="c1"># size, 实现lru
+</span>	<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">table</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="p">.</span><span class="n">capacity</span><span class="p">:</span>
+		<span class="c1"># READ, find
+</span>		<span class="n">the_lru_node</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">tail</span><span class="p">.</span><span class="n">prev</span>
+		
+		<span class="c1"># DELETE
+</span>		<span class="bp">self</span><span class="p">.</span><span class="n">_delete</span><span class="p">(</span><span class="n">the_lru_node</span><span class="p">)</span> <span class="c1"># list
+</span>		<span class="k">del</span> <span class="bp">self</span><span class="p">.</span><span class="n">table</span><span class="p">[</span><span class="n">the_lru_node</span><span class="p">.</span><span class="n">key</span><span class="p">]</span> <span class="c1"># table
+</span></code></pre></div></div>
+
+<p>GPT 说的, 对 <code class="language-plaintext highlighter-rouge">_add_to_after_head</code> 方法的优化, 很简单, 其实我们不需要 <code class="language-plaintext highlighter-rouge">tempnode</code> 和 <code class="language-plaintext highlighter-rouge">original_head_nxt</code></p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">_add_to_after_head</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">node</span><span class="p">):</span>
+		<span class="c1"># head
+</span>		<span class="n">original_head_nxt</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">head</span><span class="p">.</span><span class="nb">next</span>
+		<span class="bp">self</span><span class="p">.</span><span class="n">head</span><span class="p">.</span><span class="nb">next</span> <span class="o">=</span> <span class="n">node</span>
+		
+		<span class="c1"># node(temp_pointer)
+</span>		<span class="n">node</span><span class="p">.</span><span class="n">prev</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">head</span>
+		<span class="n">node</span><span class="p">.</span><span class="nb">next</span> <span class="o">=</span> <span class="n">original_head_nxt</span>
+		
+		<span class="c1"># original_head_nxt
+</span>		<span class="n">original_head_nxt</span><span class="p">.</span><span class="n">prev</span> <span class="o">=</span> <span class="n">node</span>
+</code></pre></div></div>
+<p>然后可以再简化一下</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">_add_to_after_head</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">node</span><span class="p">):</span>
+	<span class="n">node</span><span class="p">.</span><span class="nb">next</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">head</span><span class="p">.</span><span class="nb">next</span>
+	<span class="n">node</span><span class="p">.</span><span class="n">prev</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">head</span>
+	<span class="c1"># 上一次最新的节点(self.head.next), or现在head后一个的节点
+</span>	<span class="bp">self</span><span class="p">.</span><span class="n">head</span><span class="p">.</span><span class="nb">next</span><span class="p">.</span><span class="n">prev</span> <span class="o">=</span> <span class="n">node</span>
+	<span class="c1"># head
+</span>	<span class="bp">self</span><span class="p">.</span><span class="n">head</span><span class="p">.</span><span class="nb">next</span> <span class="o">=</span> <span class="n">node</span>
+</code></pre></div></div>
+
+<p>OK, 那么新的使用原始节点复用的 <code class="language-plaintext highlighter-rouge">LRUCache</code> 代码如下(下面的代码是 gpt 生成的, 有些名字不一样)</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Node</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">key</span> <span class="o">=</span> <span class="n">key</span>      <span class="c1"># 用于反查哈希表
+</span>        <span class="bp">self</span><span class="p">.</span><span class="n">val</span> <span class="o">=</span> <span class="n">val</span>      <span class="c1"># 实际存储的值
+</span>        <span class="bp">self</span><span class="p">.</span><span class="n">prev</span> <span class="o">=</span> <span class="bp">None</span>    <span class="c1"># 指向前一个节点
+</span>        <span class="bp">self</span><span class="p">.</span><span class="nb">next</span> <span class="o">=</span> <span class="bp">None</span>    <span class="c1"># 指向后一个节点
+</span>
+<span class="k">class</span> <span class="nc">LRUCache</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">capacity</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">capacity</span> <span class="o">=</span> <span class="n">capacity</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">table</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>  <span class="c1"># key -&gt; Node
+</span>
+        <span class="c1"># 虚拟头尾节点，便于统一操作
+</span>        <span class="bp">self</span><span class="p">.</span><span class="n">head</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">tail</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">head</span><span class="p">.</span><span class="nb">next</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">tail</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">tail</span><span class="p">.</span><span class="n">prev</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">head</span>
+
+    <span class="k">def</span> <span class="nf">_remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="s">"""从链表中断开某个节点"""</span>
+        <span class="n">node</span><span class="p">.</span><span class="n">prev</span><span class="p">.</span><span class="nb">next</span> <span class="o">=</span> <span class="n">node</span><span class="p">.</span><span class="nb">next</span>
+        <span class="n">node</span><span class="p">.</span><span class="nb">next</span><span class="p">.</span><span class="n">prev</span> <span class="o">=</span> <span class="n">node</span><span class="p">.</span><span class="n">prev</span>
+
+    <span class="k">def</span> <span class="nf">_add_to_front</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="s">"""把节点加到链表头部（head后面）"""</span>
+        <span class="n">node</span><span class="p">.</span><span class="n">prev</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">head</span>
+        <span class="n">node</span><span class="p">.</span><span class="nb">next</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">head</span><span class="p">.</span><span class="nb">next</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">head</span><span class="p">.</span><span class="nb">next</span><span class="p">.</span><span class="n">prev</span> <span class="o">=</span> <span class="n">node</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">head</span><span class="p">.</span><span class="nb">next</span> <span class="o">=</span> <span class="n">node</span>
+
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">.</span><span class="n">table</span><span class="p">:</span>
+            <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+        
+        <span class="n">node</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">table</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">_remove</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>         <span class="c1"># 从原位置断开
+</span>        <span class="bp">self</span><span class="p">.</span><span class="n">_add_to_front</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>   <span class="c1"># 移动到最前面
+</span>        <span class="k">return</span> <span class="n">node</span><span class="p">.</span><span class="n">val</span>
+
+    <span class="k">def</span> <span class="nf">put</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">.</span><span class="n">table</span><span class="p">:</span>
+            <span class="c1"># 已存在：更新值，并移动到最前面
+</span>            <span class="n">node</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">table</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            <span class="n">node</span><span class="p">.</span><span class="n">val</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">_remove</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">_add_to_front</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># 不存在：判断是否超容量
+</span>            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">table</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="p">.</span><span class="n">capacity</span><span class="p">:</span>
+                <span class="c1"># 删除最久未用（链表尾部的前一个）
+</span>                <span class="n">lru</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">tail</span><span class="p">.</span><span class="n">prev</span>
+                <span class="bp">self</span><span class="p">.</span><span class="n">_remove</span><span class="p">(</span><span class="n">lru</span><span class="p">)</span>
+                <span class="k">del</span> <span class="bp">self</span><span class="p">.</span><span class="n">table</span><span class="p">[</span><span class="n">lru</span><span class="p">.</span><span class="n">key</span><span class="p">]</span>
+
+            <span class="c1"># 新建节点并放入头部
+</span>            <span class="n">new_node</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">table</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_node</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">_add_to_front</span><span class="p">(</span><span class="n">new_node</span><span class="p">)</span>
+
+</code></pre></div></div>
+
+<h1 id="最后谈谈-简单写法用-ordered_dict">最后谈谈, 简单写法用 ordered_dict</h1>
+
+<p>这个 title 是一开始全空白的时候留下的, 就是什么都没写的时候. 我一开始以为我这个部分没有写过, 会到时候写不出来, 但是现在实现了 python 版本的 lru 之后, 我发现这个如果用 ordered_dict 方法实现非常简单, 而且在 python3.6 之后, 我们的 dict 就已经默认是有 order 的了, 那感觉就太简单了就是想象一下头和尾可以 $O(1)$ 时间取到的有 append 的先后顺序的 dict 呗, 就留下一个坑吧</p>
+
+<h1 id="appendix">Appendix</h1>
+
+<h3 id="original-开头部分">original 开头部分</h3>
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>首先是背的, 使用链表, 而且是双向链表, 这里, 为什么是要用链表呢, 因为我们想实现 $O(1)$ 时间的删除, 如果使用 arr or 直接使用字典就是 $O (n)$ 了, 这里的这个 trade off 使用了这个性质, 是用 DLList 实现的. 而且因为单链表不行, 
+
+这里的时候我其实对 key 有疑问, 就是, 什么是要在 `node` 这个 `class` 中, 写 `self.key` , 这个的 intuition 呢, 还有一个问题是我在第二次写的时候, 不知道 or 没有这个直接来判断在 dict 中使用的 key 是什么, 是那个输入的 key, 还是可以使用 node 本身呢 (这里有个疑问中的小疑惑, python 中的对象是和 java 一样会使用一个 hashcode 吗, 还是直接是地址, java 直接 print 是 hashcode 吗还是对象的内存地址), OK, 继续, 我自己想的是, 如果用 node 本身作为 table 的 key, 那么 value 一样的时候, key是不一样的, 会找不到对应的值, 所以这里, 可能应该要用本身 func 中输入的 key 作为 table 的 key, 
+
+还有是为什么 DLList 的 node class 中要加入 `self.key`  这里要回到删除机制的概念了, 想到删除, 这里想到的是从 table 上删除, 但是 table 只是作为一个 $O(1)$ 时间访问的功能, table 的访问和删除, 我们可以很快的使用 key 来实现, 但是双向链表呢, 需要在链表上删除和添加对应的 node 的操作, 这个时候, 按照题目的要求, 我们也要 $O(1)$, 想起来(这里是背的), 我们怎么直接取到这个 node 呢, 为什么不可以就是 `table[key]` 然后在里面放一个正常形式的 node 呢? 我们已经是拿到了对应的 node, 为什么还要 key 呢, 对于正常的删除, 这里正常的意思是我们使用 put 方法的时候, 如果本身的 size 在添加的时候超出了 capacity 的话,~~那确实是不需要这个使用 node 中的 self.key,~~ 对就是在这个超出的 capacity 的功能上, 我们可以使用 $O(1)$ 的时间删除在链表上的点, 但是, 我们如果使用原始的 node class 的样式的话, 在 table 上如何删除对应的对象呢, 这里, table 要 O1 只能使用 key 来进行访问, 那么如果我们在访问到一个节点的时候, 我们没有 key 这个值的话, 我们就不可以在得到 node 的情况下, 用 O1 的时间定位到(查询到?)这个 node 在 table 上, 所以我们在设计这个 node 的时候, 我们加上了 self.key 这个参数
+</code></pre></div></div>]]></content><author><name>Chia-ch&apos;i</name></author><summary type="html"><![CDATA[使用 GPT refine 了文章]]></summary></entry><entry><title type="html">2025-05-01 Dot products点积 and duality Chapter 9/16</title><link href="http://localhost:4000/Dot-products%E7%82%B9%E7%A7%AF-and-duality-Chapter-9/" rel="alternate" type="text/html" title="2025-05-01 Dot products点积 and duality Chapter 9/16" /><published>2025-05-01T00:00:00+08:00</published><updated>2025-05-01T00:00:00+08:00</updated><id>http://localhost:4000/Dot%20products%E7%82%B9%E7%A7%AF%20and%20duality%20Chapter%209</id><content type="html" xml:base="http://localhost:4000/Dot-products%E7%82%B9%E7%A7%AF-and-duality-Chapter-9/"><![CDATA[<p>3Blue1Brown</p>
 
 <p><strong>后记前置: 还挺沮丧的, 这个15min的视频, 我学了快三个小时. 从sc到lib的电脑屏幕前坐下, 已经3小时了</strong> 不过看评论区说也有物理phd常看常新, 还有花了几小时才理解的comments, 给我安慰就是说我虽然笨还不是那么笨hh, 然后虽然要逃出和他人比较的逻辑, 但是我好像还是在这个体系中啊, 哎… 我觉得难的原因是(claude refine)</p>
 <ol>
@@ -707,7 +1233,7 @@
     <text x="-5" y="207" font-size="20" text-anchor="end">-1</text>
   </g>
 
-</svg>]]></content><author><name>Chia-ch&apos;i</name></author><summary type="html"><![CDATA[3Blue1Brown]]></summary></entry><entry><title type="html">Linear Algebra Starting from Matrix Multiplication</title><link href="http://localhost:4000/%E4%BB%8EMatrix-%E4%B9%98%E6%B3%95%E8%AE%A1%E7%AE%97%E5%87%BA%E5%8F%91%E7%9A%84Linear-Algebra/" rel="alternate" type="text/html" title="Linear Algebra Starting from Matrix Multiplication" /><published>2025-04-25T00:00:00-04:00</published><updated>2025-04-25T00:00:00-04:00</updated><id>http://localhost:4000/%E4%BB%8EMatrix%20%E4%B9%98%E6%B3%95%E8%AE%A1%E7%AE%97%E5%87%BA%E5%8F%91%E7%9A%84Linear%20Algebra</id><content type="html" xml:base="http://localhost:4000/%E4%BB%8EMatrix-%E4%B9%98%E6%B3%95%E8%AE%A1%E7%AE%97%E5%87%BA%E5%8F%91%E7%9A%84Linear-Algebra/"><![CDATA[<p>好像写成一个的线代的内容了, 有很多未完待续的内容</p>
+</svg>]]></content><author><name>Chia-ch&apos;i</name></author><summary type="html"><![CDATA[3Blue1Brown]]></summary></entry><entry><title type="html">Linear Algebra Starting from Matrix Multiplication</title><link href="http://localhost:4000/%E4%BB%8EMatrix-%E4%B9%98%E6%B3%95%E8%AE%A1%E7%AE%97%E5%87%BA%E5%8F%91%E7%9A%84Linear-Algebra/" rel="alternate" type="text/html" title="Linear Algebra Starting from Matrix Multiplication" /><published>2025-04-25T00:00:00+08:00</published><updated>2025-04-25T00:00:00+08:00</updated><id>http://localhost:4000/%E4%BB%8EMatrix%20%E4%B9%98%E6%B3%95%E8%AE%A1%E7%AE%97%E5%87%BA%E5%8F%91%E7%9A%84Linear%20Algebra</id><content type="html" xml:base="http://localhost:4000/%E4%BB%8EMatrix-%E4%B9%98%E6%B3%95%E8%AE%A1%E7%AE%97%E5%87%BA%E5%8F%91%E7%9A%84Linear-Algebra/"><![CDATA[<p>好像写成一个的线代的内容了, 有很多未完待续的内容</p>
 
 <p>我可以算出矩阵乘法的题目，但当涉及到矩阵乘法的<strong>交换顺序的意义</strong>，或者说矩阵乘法<strong>本身的内在含义</strong>时，我往往无法在第一时间作出直觉反应。</p>
 
@@ -1210,7 +1736,152 @@ $\rightarrow$</p>
 <p>矩阵乘法核心思想（2）：行空间 - <em>gwave</em> 知乎 https://zhuanlan.zhihu.com/p/348551903
 Essence of linear algebra <em>3Blue1Brown</em>  https://youtu.be/fNk_zzaMoSs?si=UlVZ_LHcoih4kQvu
 NTU 线性代数 Hung-yi Lee (李宏毅) https://googly-mingto.github.io/LA_2022_fall/2022-fall.html
-MIT18.06 Linear-Algebra  https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/</p>]]></content><author><name>Chia-ch&apos;i</name></author><summary type="html"><![CDATA[好像写成一个的线代的内容了, 有很多未完待续的内容]]></summary></entry><entry><title type="html">Recursive problem and Thinking Process</title><link href="http://localhost:4000/recursive-problem/" rel="alternate" type="text/html" title="Recursive problem and Thinking Process" /><published>2025-04-22T00:00:00-04:00</published><updated>2025-04-22T00:00:00-04:00</updated><id>http://localhost:4000/recursive%20problem</id><content type="html" xml:base="http://localhost:4000/recursive-problem/"><![CDATA[<p>The article contains mistakes and misunderstandings, as it is a record of my own incorrect notes rather than a proper summary document.</p>
+MIT18.06 Linear-Algebra  https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/</p>]]></content><author><name>Chia-ch&apos;i</name></author><summary type="html"><![CDATA[好像写成一个的线代的内容了, 有很多未完待续的内容]]></summary></entry><entry><title type="html">Thinking and Re-thinking of Learning and Happiness</title><link href="http://localhost:4000/learning/" rel="alternate" type="text/html" title="Thinking and Re-thinking of Learning and Happiness" /><published>2025-04-22T00:00:00+08:00</published><updated>2025-04-22T00:00:00+08:00</updated><id>http://localhost:4000/%C2%A0learning</id><content type="html" xml:base="http://localhost:4000/learning/"><![CDATA[<p><strong><font color="red">Using LLMs to refine context through chaotic thinking, but I think GPT-4.5 (2025-04-22) is quite good.</font></strong></p>
+
+<p>下面的内容是我胡乱打的, 也就是说想到什么写什么说什么, 但是大概follow了我在想一些事情时候的本意.</p>
+
+<blockquote>
+  <p>感觉学习递归的过程, 认为让我理解了学习为什么困难or为什么成绩不好什么的. 一个本质的问题是, 你是否认为一个人可以学会任何东西. 相信大脑的能力,相信神经. 我相信这一点, 不过在学习时间够长的情况下. 为什么在一个阶段学不懂, 我认为是之前其实有东西没学懂.  基础出现问题. (补充) 但是可能硬件不同, or正常理解框架下的智商, 我感觉是大脑全链路激活层的学习速度, 我觉得学习速度应该是真有快慢的, 这是事实. 有些人, 有些快, 在比较心理, 认为自己的不行的暗示下, 距离就逐渐拉开了. 知识没有被分成足够小的chuck.</p>
+
+  <p>学习的目的非常重要, 我认为需要正反馈. 不可以骗自己, 可以骗一个月, 不可能骗10年, follow自己的内心, 非常重要. 感觉这也是另外一种版本的价值回归.</p>
+
+  <p>回到递归, 做递归, 最忌讳的就是思考递归的细节, 但是学习为什么感觉都是一个逆过程, 追求成绩, 违反本身的追求真理的逻辑, 学习过程的正反馈是, 在相同时间内学的比别人快, 学的比别人多, 而不是增加探究世界现象的手段, 当然痛苦.</p>
+
+  <p>我感觉学习, 读书, 好像在不断获得和学习认识这个时间的工具, 就像一个天生近视800度的人, 可以逐渐看清越来越远的东西, 像镜头的景深越来越深, 这个过程当然是快乐的, 而且是逐步快乐的, 这个时候检测 考试, 好像就是解读一些观察时候的corner case. 但是push的手段却是比较时间断内, 谁看到的世界比较大, 谁获得的知识比较多, 奇怪, 不过如果检测集足够大, 确实可以筛选出来那些本身获得正反馈的, 和本身速度就比较快的人…</p>
+</blockquote>
+
+<p>使用的简单prompt是,<code class="language-plaintext highlighter-rouge"> 这个是一个混乱的思路文稿,{上面的文本内容},解读,组织成一个结果完整的文章 </code></p>
+
+<h1 id="claude-37">claude 3.7</h1>
+
+<blockquote>
+  <h1 id="递归学习与思维过程的反思">递归学习与思维过程的反思</h1>
+
+  <p>您分享的文稿表达了对学习过程、特别是递归思维的一些深刻反思。我将整理您的想法，并从编程与学习思维的角度进行解构分析。</p>
+
+  <h2 id="递归思维的本质与编程应用">递归思维的本质与编程应用</h2>
+
+  <p>在编写代码时，尤其是面对递归问题时，人脑应该关注的核心不是递归的具体执行细节，而是问题的整体结构和解决方案的框架。这与您所说的”最忌讳的就是思考递归的细节”相呼应。</p>
+
+  <p>在编程思维过程中，我们应该关注：</p>
+
+  <ol>
+    <li><strong>问题分解</strong> - 将复杂问题拆解为更小、更易管理的子问题</li>
+    <li><strong>模式识别</strong> - 发现问题中的重复模式，这是递归的基础</li>
+    <li><strong>边界条件</strong> - 明确递归的终止条件，防止无限循环</li>
+    <li><strong>信任抽象</strong> - 相信子问题的解决方案，而不陷入执行细节</li>
+  </ol>
+
+  <h2 id="编码思维流程">编码思维流程</h2>
+
+  <p>当我们编写递归代码时，思维流程通常是：</p>
+
+  <ol>
+    <li>首先识别问题是否适合递归解决（是否有重复的子问题结构）</li>
+    <li>定义基本情况（边界条件）- 递归必须有终止点</li>
+    <li>设计递归关系 - 如何将大问题分解为同类型的小问题</li>
+    <li>实现递归逻辑，相信递归会正确处理子问题</li>
+    <li>验证解决方案，检查边界情况</li>
+  </ol>
+
+  <p>这个过程与您提到的”学习的逆过程”有相似之处。递归编程要求我们相信函数能够完成其承诺，而不是纠结于每一层的执行细节。</p>
+
+  <h2 id="学习过程的启示">学习过程的启示</h2>
+
+  <p>您的文稿中提到了几个关于学习的重要观点：</p>
+
+  <ol>
+    <li><strong>学习基础的重要性</strong> - “在学习时间够长的情况下，为什么在一个阶段学不懂，我认为是之前其实有东西没学懂，基础出现问题”</li>
+    <li><strong>内在动机与正反馈</strong> - “学习的目的非常重要，我认为需要正反馈”</li>
+    <li><strong>知识分块</strong> - “知识没有被分成足够小的chuck”</li>
+  </ol>
+
+  <p>这些观点与有效的编程学习特别相关。编程学习也需要将复杂概念分解为可管理的小块，建立在坚实的基础上，并通过解决问题获得正反馈。</p>
+
+  <h2 id="编程与学习的哲学联系">编程与学习的哲学联系</h2>
+
+  <p>编写代码，尤其是递归代码，可以视为一种认知训练，它培养了以下思维能力：</p>
+
+  <ol>
+    <li><strong>抽象思维</strong> - 看到问题的本质而非表面细节</li>
+    <li><strong>系统思考</strong> - 理解部分与整体的关系</li>
+    <li><strong>信任机制</strong> - 相信系统各部分能够协同工作</li>
+  </ol>
+
+  <p>这与您描述的学习过程相似：”学习，读书，好像在不断获得和学习认识这个时间的工具，就像一个天生近视800度的人，可以逐渐看清越来越远的东西，像镜头的景深越来越深”。</p>
+
+  <h2 id="实践建议">实践建议</h2>
+
+  <p>在面对递归等复杂编程概念时：</p>
+
+  <ol>
+    <li>先理解问题的整体结构，而非实现细节</li>
+    <li>确定最简单情况的解决方案（基本情况）</li>
+    <li>设计递归关系，而不是试图在脑中跟踪整个执行过程</li>
+    <li>编写代码时关注逻辑结构，而非执行顺序</li>
+    <li>通过测试简单情况验证代码，建立对解决方案的信心</li>
+  </ol>
+
+  <p>这种方法类似于您所提倡的学习方式：关注整体理解，而非机械记忆；追求内在价值，而非外部评判；将复杂问题分解为可管理的部分。</p>
+
+  <p>通过这种方式，编程不仅是一种技能获取，更是一种思维培养，帮助我们”看清越来越远的东西”，扩展我们认知的”景深”。</p>
+</blockquote>
+
+<h1 id="deepseek---r1">deepseek - R1</h1>
+
+<blockquote>
+  <h2 id="递归思维与学习困境一场关于认知本质的思辨">递归思维与学习困境：一场关于认知本质的思辨</h2>
+
+  <p>在计算机科学的递归算法里，程序员最忌惮陷入函数调用的细节迷宫。这个编程隐喻恰如其分地揭示了人类认知的深层困境——当我们面对知识体系的建构时，常常迷失在表层现象的追逐中，却遗忘了思维递归的本质特征：每个层次的突破都建立在坚实基础之上。</p>
+
+  <h3 id="一知识大厦的地基危机">一、知识大厦的地基危机</h3>
+
+  <p>现代教育体系如同加速运转的传送带，将标准化知识模块源源不断地输送给学习者。在这个过程中，多数人陷入”知识假性完整”的认知陷阱：微积分公式的机械套用掩盖了极限概念的模糊，编程语法的熟练操作遮蔽了算法思维的缺失。这种基础性认知漏洞如同建筑地基的裂缝，在知识体系不断叠加的过程中产生级联效应，最终导致整个认知结构的崩塌。</p>
+
+  <p>认知神经科学的最新研究证实，大脑新皮层的神经可塑性并非均匀分布。前额叶皮层与海马体构成的记忆环路，其信息处理效率直接影响知识模块的整合质量。当基础概念网络存在结构缺陷时，高阶认知功能的神经表征将出现拓扑紊乱，这正是”阶段式学习困境”的神经生物学基础。</p>
+
+  <h3 id="二认知时钟的速率谜题">二、认知时钟的速率谜题</h3>
+
+  <p>在慕尼黑大学的天才追踪研究中，发现顶尖学者的大脑白质纤维束呈现出独特的拓扑结构。这些增强的神经连接通道，使得他们的信息处理速度比常人快3-5个数量级。这种硬件差异如同CPU的时钟频率，决定了知识编译的基本速率。但神经可塑性研究同样表明，持续的正向刺激能使大脑胼胝体的髓鞘厚度每年增加0.5-1%，这意味着学习速度本身具有可塑性。</p>
+
+  <p>教育评估体系制造的比较陷阱，本质上是将马拉松改造成百米冲刺的竞技场。当知识检测简化为碎片信息的提取速度测试，真正的认知深度反而被排除在评价体系之外。这种异化机制催生出大批”解题运动员”，他们熟练操作知识符号却丧失了概念建构能力。</p>
+
+  <h3 id="三认知觉醒的正向递归">三、认知觉醒的正向递归</h3>
+
+  <p>真正的学习革命始于元认知的觉醒。当学习者将注意力从外部评价转向内在建构，知识获取就转化为持续的正反馈循环。这个过程遵循着严格的递归逻辑：每个新概念必须完全内化为认知基元，才能支撑更高层级的思维跃迁。MIT媒体实验室的认知增强实验证明，采用这种递归学习法的被试者，其知识留存率是传统学习者的4.7倍。</p>
+
+  <p>建立认知增强系统需要重构学习范式：将知识体系分解为原子化概念单元，通过间隔重复形成稳定的神经突触连接；构建概念之间的多维联结，形成抗干扰的认知拓扑网络；最终在问题求解中实现知识的创造性重组。这个过程如同3D打印认知结构，逐层构建却始终保持整体一致性。</p>
+
+  <p>站在认知革命的门槛上，我们需要重新理解学习的本质。知识获取不是信息的简单堆砌，而是认知结构的递归升级。当我们将每个知识节点都锻造成坚实的认知基元，就能在思维空间实现真正的维度跃迁。这种递归式认知进化，终将带领我们突破智能边界，见证思维宇宙的奇点时刻。</p>
+</blockquote>
+
+<h1 id="gpt---45">GPT - 4.5</h1>
+
+<blockquote>
+  <p>学习递归的过程让我意识到为什么学习对很多人来说如此困难，也让我进一步理解了成绩表现不佳背后的原因。</p>
+
+  <p>首先，我们必须承认一个基本问题：人类是否能够学习任何内容？我个人相信大脑具备这样的能力，相信神经网络能够通过不断训练和刺激逐渐掌握知识。然而，即便学习时间充足，某些阶段的知识却依然难以理解，这背后往往是因为之前的基础知识并没有真正掌握透彻。</p>
+
+  <p>然而，这里还存在另一个重要因素：硬件的不同，或者我们常规理解中的智力差异。每个人大脑中神经元连接的效率，即所谓的“全链路激活层”，确实存在差别。这导致了不同人的学习速度存在客观上的差异。这种差异本身是真实存在的事实。有些人学得更快，有些人则相对慢一些。当人们开始将自己与他人比较，并暗示自己能力不足时，这种差距便会逐渐扩大。此外，知识没有被分解成足够小的知识单元（chunks），也进一步加剧了学习困难。</p>
+
+  <p>明确学习的目的至关重要。我认为最重要的是持续的正反馈。一个人可能短暂地欺骗自己一段时间，比如一个月，但绝不可能持续地自欺欺人十年之久。因此，诚实地追随内心真正的兴趣与价值观尤为重要。这实际上也是一种价值回归——回归到学习本质的乐趣与探索。</p>
+
+  <p>以递归为例，递归最大的忌讳便是陷入细节，却忽略整体思维。可是现实的学习过程却经常与这种理念背道而驰。追求分数和表面成绩的过程中，往往偏离了对真理与知识本身的追求。真正的正反馈应该来源于自己对世界现象的深入探索和理解，而不是在相同时间内比别人学得更多或更快。然而，现行的学习模式与评估机制却经常以知识量和学习速度为衡量标准，这自然带来学习的痛苦与焦虑。</p>
+
+  <p>我感觉学习的过程，就像不断地获得观察世界的工具。就好像一个天生视力不足、近视800度的人，通过不断调整镜片逐渐看清更远处的风景，视野变得越来越清晰，景深也逐渐增加。这种逐步清晰的过程本应是快乐且满足的。而考试或者测试，就像是观察世界中的一些特殊案例（corner cases），本质上是一种检验我们观察能力的方式。</p>
+
+  <p>但令人奇怪的是，我们往往用一种截然相反的标准去评价——在特定的时间段内，谁观察得更多，掌握的知识更广。这种评价方法尽管表面上合理，但实际上却忽略了真正重要的事情：人们学习过程中自发的正反馈和内在的学习速度。不过如果评估的范围和规模足够大，确实能够从中挑选出那些本身就能获得正反馈、学习速度较快的人。</p>
+
+  <p>最终，学习不应只是一场速度与数量的竞争，而更应该是一场逐渐拓宽视野、深入理解世界的旅程。理解并尊重学习的本质，才能真正享受学习的快乐与成长。</p>
+</blockquote>
+
+<h1 id="2025-04-27">2025-04-27</h1>
+
+<p>好像也解决了那个所谓买菜为什么要数学的问题, 如果对探知的要求只有百元以内的菜价, 那么好像确实没有持续学习的必要了. 再引申开来一点的话, 如果课本里的知识没有在帮助解决现实中的问题，只提供难和奇怪的过程, 就很容易让人觉得它们抽象且难以消化。而且，我认为一部分学习带来的成就感来源于和他人的比较，一旦身边的同路人越来越少，或者遇到天赋更高的人，这种动力就会逐渐消失. 所以我感觉做事的时候更应该想清楚目的.</p>
+
+<p>一点粗浅的感想罢了.</p>
+
+<p>And我现在感觉读书还挺有趣的.</p>]]></content><author><name>Chia-ch&apos;i</name></author><summary type="html"><![CDATA[Using LLMs to refine context through chaotic thinking, but I think GPT-4.5 (2025-04-22) is quite good.]]></summary></entry><entry><title type="html">Recursive problem and Thinking Process</title><link href="http://localhost:4000/recursive-problem/" rel="alternate" type="text/html" title="Recursive problem and Thinking Process" /><published>2025-04-22T00:00:00+08:00</published><updated>2025-04-22T00:00:00+08:00</updated><id>http://localhost:4000/recursive%20problem</id><content type="html" xml:base="http://localhost:4000/recursive-problem/"><![CDATA[<p>The article contains mistakes and misunderstandings, as it is a record of my own incorrect notes rather than a proper summary document.</p>
 
 <h1 id="first-module-1---arrays-arraylists-recursion">First Module 1 - Arrays, ArrayLists, Recursion</h1>
 
@@ -1465,152 +2136,7 @@ I think it is a good way to understand?</p>
             
         
         
-</code></pre></div></div>]]></content><author><name>Chia-ch&apos;i</name></author><summary type="html"><![CDATA[The article contains mistakes and misunderstandings, as it is a record of my own incorrect notes rather than a proper summary document.]]></summary></entry><entry><title type="html">Thinking and Re-thinking of Learning and Happiness</title><link href="http://localhost:4000/learning/" rel="alternate" type="text/html" title="Thinking and Re-thinking of Learning and Happiness" /><published>2025-04-22T00:00:00-04:00</published><updated>2025-04-22T00:00:00-04:00</updated><id>http://localhost:4000/%C2%A0learning</id><content type="html" xml:base="http://localhost:4000/learning/"><![CDATA[<p><strong><font color="red">Using LLMs to refine context through chaotic thinking, but I think GPT-4.5 (2025-04-22) is quite good.</font></strong></p>
-
-<p>下面的内容是我胡乱打的, 也就是说想到什么写什么说什么, 但是大概follow了我在想一些事情时候的本意.</p>
-
-<blockquote>
-  <p>感觉学习递归的过程, 认为让我理解了学习为什么困难or为什么成绩不好什么的. 一个本质的问题是, 你是否认为一个人可以学会任何东西. 相信大脑的能力,相信神经. 我相信这一点, 不过在学习时间够长的情况下. 为什么在一个阶段学不懂, 我认为是之前其实有东西没学懂.  基础出现问题. (补充) 但是可能硬件不同, or正常理解框架下的智商, 我感觉是大脑全链路激活层的学习速度, 我觉得学习速度应该是真有快慢的, 这是事实. 有些人, 有些快, 在比较心理, 认为自己的不行的暗示下, 距离就逐渐拉开了. 知识没有被分成足够小的chuck.</p>
-
-  <p>学习的目的非常重要, 我认为需要正反馈. 不可以骗自己, 可以骗一个月, 不可能骗10年, follow自己的内心, 非常重要. 感觉这也是另外一种版本的价值回归.</p>
-
-  <p>回到递归, 做递归, 最忌讳的就是思考递归的细节, 但是学习为什么感觉都是一个逆过程, 追求成绩, 违反本身的追求真理的逻辑, 学习过程的正反馈是, 在相同时间内学的比别人快, 学的比别人多, 而不是增加探究世界现象的手段, 当然痛苦.</p>
-
-  <p>我感觉学习, 读书, 好像在不断获得和学习认识这个时间的工具, 就像一个天生近视800度的人, 可以逐渐看清越来越远的东西, 像镜头的景深越来越深, 这个过程当然是快乐的, 而且是逐步快乐的, 这个时候检测 考试, 好像就是解读一些观察时候的corner case. 但是push的手段却是比较时间断内, 谁看到的世界比较大, 谁获得的知识比较多, 奇怪, 不过如果检测集足够大, 确实可以筛选出来那些本身获得正反馈的, 和本身速度就比较快的人…</p>
-</blockquote>
-
-<p>使用的简单prompt是,<code class="language-plaintext highlighter-rouge"> 这个是一个混乱的思路文稿,{上面的文本内容},解读,组织成一个结果完整的文章 </code></p>
-
-<h1 id="claude-37">claude 3.7</h1>
-
-<blockquote>
-  <h1 id="递归学习与思维过程的反思">递归学习与思维过程的反思</h1>
-
-  <p>您分享的文稿表达了对学习过程、特别是递归思维的一些深刻反思。我将整理您的想法，并从编程与学习思维的角度进行解构分析。</p>
-
-  <h2 id="递归思维的本质与编程应用">递归思维的本质与编程应用</h2>
-
-  <p>在编写代码时，尤其是面对递归问题时，人脑应该关注的核心不是递归的具体执行细节，而是问题的整体结构和解决方案的框架。这与您所说的”最忌讳的就是思考递归的细节”相呼应。</p>
-
-  <p>在编程思维过程中，我们应该关注：</p>
-
-  <ol>
-    <li><strong>问题分解</strong> - 将复杂问题拆解为更小、更易管理的子问题</li>
-    <li><strong>模式识别</strong> - 发现问题中的重复模式，这是递归的基础</li>
-    <li><strong>边界条件</strong> - 明确递归的终止条件，防止无限循环</li>
-    <li><strong>信任抽象</strong> - 相信子问题的解决方案，而不陷入执行细节</li>
-  </ol>
-
-  <h2 id="编码思维流程">编码思维流程</h2>
-
-  <p>当我们编写递归代码时，思维流程通常是：</p>
-
-  <ol>
-    <li>首先识别问题是否适合递归解决（是否有重复的子问题结构）</li>
-    <li>定义基本情况（边界条件）- 递归必须有终止点</li>
-    <li>设计递归关系 - 如何将大问题分解为同类型的小问题</li>
-    <li>实现递归逻辑，相信递归会正确处理子问题</li>
-    <li>验证解决方案，检查边界情况</li>
-  </ol>
-
-  <p>这个过程与您提到的”学习的逆过程”有相似之处。递归编程要求我们相信函数能够完成其承诺，而不是纠结于每一层的执行细节。</p>
-
-  <h2 id="学习过程的启示">学习过程的启示</h2>
-
-  <p>您的文稿中提到了几个关于学习的重要观点：</p>
-
-  <ol>
-    <li><strong>学习基础的重要性</strong> - “在学习时间够长的情况下，为什么在一个阶段学不懂，我认为是之前其实有东西没学懂，基础出现问题”</li>
-    <li><strong>内在动机与正反馈</strong> - “学习的目的非常重要，我认为需要正反馈”</li>
-    <li><strong>知识分块</strong> - “知识没有被分成足够小的chuck”</li>
-  </ol>
-
-  <p>这些观点与有效的编程学习特别相关。编程学习也需要将复杂概念分解为可管理的小块，建立在坚实的基础上，并通过解决问题获得正反馈。</p>
-
-  <h2 id="编程与学习的哲学联系">编程与学习的哲学联系</h2>
-
-  <p>编写代码，尤其是递归代码，可以视为一种认知训练，它培养了以下思维能力：</p>
-
-  <ol>
-    <li><strong>抽象思维</strong> - 看到问题的本质而非表面细节</li>
-    <li><strong>系统思考</strong> - 理解部分与整体的关系</li>
-    <li><strong>信任机制</strong> - 相信系统各部分能够协同工作</li>
-  </ol>
-
-  <p>这与您描述的学习过程相似：”学习，读书，好像在不断获得和学习认识这个时间的工具，就像一个天生近视800度的人，可以逐渐看清越来越远的东西，像镜头的景深越来越深”。</p>
-
-  <h2 id="实践建议">实践建议</h2>
-
-  <p>在面对递归等复杂编程概念时：</p>
-
-  <ol>
-    <li>先理解问题的整体结构，而非实现细节</li>
-    <li>确定最简单情况的解决方案（基本情况）</li>
-    <li>设计递归关系，而不是试图在脑中跟踪整个执行过程</li>
-    <li>编写代码时关注逻辑结构，而非执行顺序</li>
-    <li>通过测试简单情况验证代码，建立对解决方案的信心</li>
-  </ol>
-
-  <p>这种方法类似于您所提倡的学习方式：关注整体理解，而非机械记忆；追求内在价值，而非外部评判；将复杂问题分解为可管理的部分。</p>
-
-  <p>通过这种方式，编程不仅是一种技能获取，更是一种思维培养，帮助我们”看清越来越远的东西”，扩展我们认知的”景深”。</p>
-</blockquote>
-
-<h1 id="deepseek---r1">deepseek - R1</h1>
-
-<blockquote>
-  <h2 id="递归思维与学习困境一场关于认知本质的思辨">递归思维与学习困境：一场关于认知本质的思辨</h2>
-
-  <p>在计算机科学的递归算法里，程序员最忌惮陷入函数调用的细节迷宫。这个编程隐喻恰如其分地揭示了人类认知的深层困境——当我们面对知识体系的建构时，常常迷失在表层现象的追逐中，却遗忘了思维递归的本质特征：每个层次的突破都建立在坚实基础之上。</p>
-
-  <h3 id="一知识大厦的地基危机">一、知识大厦的地基危机</h3>
-
-  <p>现代教育体系如同加速运转的传送带，将标准化知识模块源源不断地输送给学习者。在这个过程中，多数人陷入”知识假性完整”的认知陷阱：微积分公式的机械套用掩盖了极限概念的模糊，编程语法的熟练操作遮蔽了算法思维的缺失。这种基础性认知漏洞如同建筑地基的裂缝，在知识体系不断叠加的过程中产生级联效应，最终导致整个认知结构的崩塌。</p>
-
-  <p>认知神经科学的最新研究证实，大脑新皮层的神经可塑性并非均匀分布。前额叶皮层与海马体构成的记忆环路，其信息处理效率直接影响知识模块的整合质量。当基础概念网络存在结构缺陷时，高阶认知功能的神经表征将出现拓扑紊乱，这正是”阶段式学习困境”的神经生物学基础。</p>
-
-  <h3 id="二认知时钟的速率谜题">二、认知时钟的速率谜题</h3>
-
-  <p>在慕尼黑大学的天才追踪研究中，发现顶尖学者的大脑白质纤维束呈现出独特的拓扑结构。这些增强的神经连接通道，使得他们的信息处理速度比常人快3-5个数量级。这种硬件差异如同CPU的时钟频率，决定了知识编译的基本速率。但神经可塑性研究同样表明，持续的正向刺激能使大脑胼胝体的髓鞘厚度每年增加0.5-1%，这意味着学习速度本身具有可塑性。</p>
-
-  <p>教育评估体系制造的比较陷阱，本质上是将马拉松改造成百米冲刺的竞技场。当知识检测简化为碎片信息的提取速度测试，真正的认知深度反而被排除在评价体系之外。这种异化机制催生出大批”解题运动员”，他们熟练操作知识符号却丧失了概念建构能力。</p>
-
-  <h3 id="三认知觉醒的正向递归">三、认知觉醒的正向递归</h3>
-
-  <p>真正的学习革命始于元认知的觉醒。当学习者将注意力从外部评价转向内在建构，知识获取就转化为持续的正反馈循环。这个过程遵循着严格的递归逻辑：每个新概念必须完全内化为认知基元，才能支撑更高层级的思维跃迁。MIT媒体实验室的认知增强实验证明，采用这种递归学习法的被试者，其知识留存率是传统学习者的4.7倍。</p>
-
-  <p>建立认知增强系统需要重构学习范式：将知识体系分解为原子化概念单元，通过间隔重复形成稳定的神经突触连接；构建概念之间的多维联结，形成抗干扰的认知拓扑网络；最终在问题求解中实现知识的创造性重组。这个过程如同3D打印认知结构，逐层构建却始终保持整体一致性。</p>
-
-  <p>站在认知革命的门槛上，我们需要重新理解学习的本质。知识获取不是信息的简单堆砌，而是认知结构的递归升级。当我们将每个知识节点都锻造成坚实的认知基元，就能在思维空间实现真正的维度跃迁。这种递归式认知进化，终将带领我们突破智能边界，见证思维宇宙的奇点时刻。</p>
-</blockquote>
-
-<h1 id="gpt---45">GPT - 4.5</h1>
-
-<blockquote>
-  <p>学习递归的过程让我意识到为什么学习对很多人来说如此困难，也让我进一步理解了成绩表现不佳背后的原因。</p>
-
-  <p>首先，我们必须承认一个基本问题：人类是否能够学习任何内容？我个人相信大脑具备这样的能力，相信神经网络能够通过不断训练和刺激逐渐掌握知识。然而，即便学习时间充足，某些阶段的知识却依然难以理解，这背后往往是因为之前的基础知识并没有真正掌握透彻。</p>
-
-  <p>然而，这里还存在另一个重要因素：硬件的不同，或者我们常规理解中的智力差异。每个人大脑中神经元连接的效率，即所谓的“全链路激活层”，确实存在差别。这导致了不同人的学习速度存在客观上的差异。这种差异本身是真实存在的事实。有些人学得更快，有些人则相对慢一些。当人们开始将自己与他人比较，并暗示自己能力不足时，这种差距便会逐渐扩大。此外，知识没有被分解成足够小的知识单元（chunks），也进一步加剧了学习困难。</p>
-
-  <p>明确学习的目的至关重要。我认为最重要的是持续的正反馈。一个人可能短暂地欺骗自己一段时间，比如一个月，但绝不可能持续地自欺欺人十年之久。因此，诚实地追随内心真正的兴趣与价值观尤为重要。这实际上也是一种价值回归——回归到学习本质的乐趣与探索。</p>
-
-  <p>以递归为例，递归最大的忌讳便是陷入细节，却忽略整体思维。可是现实的学习过程却经常与这种理念背道而驰。追求分数和表面成绩的过程中，往往偏离了对真理与知识本身的追求。真正的正反馈应该来源于自己对世界现象的深入探索和理解，而不是在相同时间内比别人学得更多或更快。然而，现行的学习模式与评估机制却经常以知识量和学习速度为衡量标准，这自然带来学习的痛苦与焦虑。</p>
-
-  <p>我感觉学习的过程，就像不断地获得观察世界的工具。就好像一个天生视力不足、近视800度的人，通过不断调整镜片逐渐看清更远处的风景，视野变得越来越清晰，景深也逐渐增加。这种逐步清晰的过程本应是快乐且满足的。而考试或者测试，就像是观察世界中的一些特殊案例（corner cases），本质上是一种检验我们观察能力的方式。</p>
-
-  <p>但令人奇怪的是，我们往往用一种截然相反的标准去评价——在特定的时间段内，谁观察得更多，掌握的知识更广。这种评价方法尽管表面上合理，但实际上却忽略了真正重要的事情：人们学习过程中自发的正反馈和内在的学习速度。不过如果评估的范围和规模足够大，确实能够从中挑选出那些本身就能获得正反馈、学习速度较快的人。</p>
-
-  <p>最终，学习不应只是一场速度与数量的竞争，而更应该是一场逐渐拓宽视野、深入理解世界的旅程。理解并尊重学习的本质，才能真正享受学习的快乐与成长。</p>
-</blockquote>
-
-<h1 id="2025-04-27">2025-04-27</h1>
-
-<p>好像也解决了那个所谓买菜为什么要数学的问题, 如果对探知的要求只有百元以内的菜价, 那么好像确实没有持续学习的必要了. 再引申开来一点的话, 如果课本里的知识没有在帮助解决现实中的问题，只提供难和奇怪的过程, 就很容易让人觉得它们抽象且难以消化。而且，我认为一部分学习带来的成就感来源于和他人的比较，一旦身边的同路人越来越少，或者遇到天赋更高的人，这种动力就会逐渐消失. 所以我感觉做事的时候更应该想清楚目的.</p>
-
-<p>一点粗浅的感想罢了.</p>
-
-<p>And我现在感觉读书还挺有趣的.</p>]]></content><author><name>Chia-ch&apos;i</name></author><summary type="html"><![CDATA[Using LLMs to refine context through chaotic thinking, but I think GPT-4.5 (2025-04-22) is quite good.]]></summary></entry><entry><title type="html">2025-03-07-How I use LLMs by Andrej Karpathy 看后总结</title><link href="http://localhost:4000/How-I-use-LLMs-by-Andrej-Karpathy-%E7%9C%8B%E5%90%8E%E6%80%BB%E7%BB%93/" rel="alternate" type="text/html" title="2025-03-07-How I use LLMs by Andrej Karpathy 看后总结" /><published>2025-03-27T00:00:00-04:00</published><updated>2025-03-27T00:00:00-04:00</updated><id>http://localhost:4000/How%20I%20use%20LLMs%20by%20Andrej%20Karpathy%20%E7%9C%8B%E5%90%8E%E6%80%BB%E7%BB%93</id><content type="html" xml:base="http://localhost:4000/How-I-use-LLMs-by-Andrej-Karpathy-%E7%9C%8B%E5%90%8E%E6%80%BB%E7%BB%93/"><![CDATA[<p>https://www.youtube.com/watch?v=EWvNQjAaOHw</p>
+</code></pre></div></div>]]></content><author><name>Chia-ch&apos;i</name></author><summary type="html"><![CDATA[The article contains mistakes and misunderstandings, as it is a record of my own incorrect notes rather than a proper summary document.]]></summary></entry><entry><title type="html">2025-03-07-How I use LLMs by Andrej Karpathy 看后总结</title><link href="http://localhost:4000/How-I-use-LLMs-by-Andrej-Karpathy-%E7%9C%8B%E5%90%8E%E6%80%BB%E7%BB%93/" rel="alternate" type="text/html" title="2025-03-07-How I use LLMs by Andrej Karpathy 看后总结" /><published>2025-03-27T00:00:00+08:00</published><updated>2025-03-27T00:00:00+08:00</updated><id>http://localhost:4000/How%20I%20use%20LLMs%20by%20Andrej%20Karpathy%20%E7%9C%8B%E5%90%8E%E6%80%BB%E7%BB%93</id><content type="html" xml:base="http://localhost:4000/How-I-use-LLMs-by-Andrej-Karpathy-%E7%9C%8B%E5%90%8E%E6%80%BB%E7%BB%93/"><![CDATA[<p>https://www.youtube.com/watch?v=EWvNQjAaOHw</p>
 
 <p>当然这个视频, 感觉是一个挺好的材料, 从一个很简单的角度切入, 快速判断什么任务可以实现
 两个多小时的视频, 结果花了三天的时间还比较碎片的时间才看完, 之前通宵两天熬夜太狠了, 感觉看的时候一直没有很专注, 然后还没干什么事情, 笑死.
@@ -1764,7 +2290,7 @@ simpleTex, Math Snipping Tool这种识别论文中的公式使用OCR的小而美
 09-March-2025
 今天好像也是花了好久在写这个东西…</p>
 
-<p>希望 llya 这位LLM真神可以在5年之内弄出一个更加逆天的模型.</p>]]></content><author><name>Chia-ch&apos;i</name></author><summary type="html"><![CDATA[https://www.youtube.com/watch?v=EWvNQjAaOHw]]></summary></entry><entry><title type="html">Life goals before the age of 30 (in addition to finding a job)</title><link href="http://localhost:4000/Life-goals-at-30/" rel="alternate" type="text/html" title="Life goals before the age of 30 (in addition to finding a job)" /><published>2024-07-28T00:00:00-04:00</published><updated>2024-07-28T00:00:00-04:00</updated><id>http://localhost:4000/Life%20goals%20at%2030</id><content type="html" xml:base="http://localhost:4000/Life-goals-at-30/"><![CDATA[<p>:)</p>
+<p>希望 llya 这位LLM真神可以在5年之内弄出一个更加逆天的模型.</p>]]></content><author><name>Chia-ch&apos;i</name></author><summary type="html"><![CDATA[https://www.youtube.com/watch?v=EWvNQjAaOHw]]></summary></entry><entry><title type="html">Life goals before the age of 30 (in addition to finding a job)</title><link href="http://localhost:4000/Life-goals-at-30/" rel="alternate" type="text/html" title="Life goals before the age of 30 (in addition to finding a job)" /><published>2024-07-28T00:00:00+08:00</published><updated>2024-07-28T00:00:00+08:00</updated><id>http://localhost:4000/Life%20goals%20at%2030</id><content type="html" xml:base="http://localhost:4000/Life-goals-at-30/"><![CDATA[<p>:)</p>
 
 <ol>
   <li>Suceived in GT in the QCF and CSE program(wanna dual degree)…</li>
@@ -1777,7 +2303,7 @@ simpleTex, Math Snipping Tool这种识别论文中的公式使用OCR的小而美
 
 <p>时间很长却也很快.</p>
 
-<p>感觉人还是要活的现实一点, 不要太有梦想, 做一些本身有实际价值事情, 而不是感动自己/他人的事情.</p>]]></content><author><name>Chia-ch&apos;i</name></author><summary type="html"><![CDATA[:)]]></summary></entry><entry><title type="html">签证准备材料list</title><link href="http://localhost:4000/visa-preparation/" rel="alternate" type="text/html" title="签证准备材料list" /><published>2024-07-11T00:00:00-04:00</published><updated>2024-07-11T00:00:00-04:00</updated><id>http://localhost:4000/visa-preparation</id><content type="html" xml:base="http://localhost:4000/visa-preparation/"><![CDATA[<p>记录签证准备材料的list</p>
+<p>感觉人还是要活的现实一点, 不要太有梦想, 做一些本身有实际价值事情, 而不是感动自己/他人的事情.</p>]]></content><author><name>Chia-ch&apos;i</name></author><summary type="html"><![CDATA[:)]]></summary></entry><entry><title type="html">签证准备材料list</title><link href="http://localhost:4000/visa-preparation/" rel="alternate" type="text/html" title="签证准备材料list" /><published>2024-07-11T00:00:00+08:00</published><updated>2024-07-11T00:00:00+08:00</updated><id>http://localhost:4000/visa-preparation</id><content type="html" xml:base="http://localhost:4000/visa-preparation/"><![CDATA[<p>记录签证准备材料的list</p>
 
 <h3 id="美国签证准备材料-详细版本">美国签证准备材料 (详细版本)</h3>
 
@@ -1856,7 +2382,7 @@ simpleTex, Math Snipping Tool这种识别论文中的公式使用OCR的小而美
   </li>
 </ul>
 
-<p>温馨提示：领馆有权利让您补充材料，若被通知请及时配合提交；拿到签证之后再定机酒。</p>]]></content><author><name>Chia-ch&apos;i</name></author><summary type="html"><![CDATA[记录签证准备材料的list]]></summary></entry><entry><title type="html">Notes for ‘How To Read MTF Curves’ article</title><link href="http://localhost:4000/how-to-read-mtf-curves.md/" rel="alternate" type="text/html" title="Notes for ‘How To Read MTF Curves’ article" /><published>2024-06-18T00:00:00-04:00</published><updated>2024-06-18T00:00:00-04:00</updated><id>http://localhost:4000/how-to-read-mtf-curves.md</id><content type="html" xml:base="http://localhost:4000/how-to-read-mtf-curves.md/"><![CDATA[<p>文章翻译, 阅读, 解读MTF曲线, 笔记总结</p>
+<p>温馨提示：领馆有权利让您补充材料，若被通知请及时配合提交；拿到签证之后再定机酒。</p>]]></content><author><name>Chia-ch&apos;i</name></author><summary type="html"><![CDATA[记录签证准备材料的list]]></summary></entry><entry><title type="html">Notes for ‘How To Read MTF Curves’ article</title><link href="http://localhost:4000/how-to-read-mtf-curves.md/" rel="alternate" type="text/html" title="Notes for ‘How To Read MTF Curves’ article" /><published>2024-06-18T00:00:00+08:00</published><updated>2024-06-18T00:00:00+08:00</updated><id>http://localhost:4000/how-to-read-mtf-curves.md</id><content type="html" xml:base="http://localhost:4000/how-to-read-mtf-curves.md/"><![CDATA[<p>文章翻译, 阅读, 解读MTF曲线, 笔记总结</p>
 <h1 id="preface">Preface</h1>
 
 <p>The following context and material are sourced from Dr. H.H. Nasse’s articles.  Many many thx for sharing and explain MTF in the preview articles.  However, I still had no understanding at all when I read those articles during my first year of bachelor studies. I will attempt to write this article in my own words without using any grammar or AI tools.  I have to say in some places, I will use some “direct copy” sentences. I don’t consider this as a form of academic plagiarism, as I am writing this post for learning in photography as an enthusiast.</p>
@@ -2234,7 +2760,7 @@ simpleTex, Math Snipping Tool这种识别论文中的公式使用OCR的小而美
 
 <p>本来是计划把4个表都解释一遍, 但是发现, 好像没有现实意义, 因为文章的意图是理解MTF曲线, 但是这种形式的MTF曲线已经不再使用. 但是在这个部分要指出的是, MTF测量表会不准, 显示 出错误的数据信息, 在文章中的例子就是, 比如现实图像在影射后, 在cmos上位移会没有显示清晰的图像, 但是位移的图像在某个Lp/mm的条纹下, 移动到了下一个位置, 导致图像没有变模糊, 仍然清晰. 虽然镜头的素质没有提高, 但是由于测试的是这种特殊的条纹, 让MTF的曲线的数据提高, 这是虚假的成绩. 这个现象在文章中被专门指出. 我在这里直接引用, <strong>But:</strong> There is no contrast at 40lp/mm! <font color="red">The curve of the modulation transfer can drop to zero and then increase again.</font>  This is then called “spurious resolution”, which is a somewhat unfortunate expression because the structure with 60lp/mm is reproduced with a clear resolution.</p>
 
-<h2 id="文章中的第四种mtf曲线the-mtf-values-of-this-4th-type">文章中的第四种MTF曲线(The MTF values of this 4th type)</h2>]]></content><author><name>Chia-ch&apos;i</name></author><summary type="html"><![CDATA[文章翻译, 阅读, 解读MTF曲线, 笔记总结 Preface]]></summary></entry><entry><title type="html">Inner producted 一些问题</title><link href="http://localhost:4000/inner-producted/" rel="alternate" type="text/html" title="Inner producted 一些问题" /><published>2023-10-09T00:00:00-04:00</published><updated>2023-10-09T00:00:00-04:00</updated><id>http://localhost:4000/inner%20producted</id><content type="html" xml:base="http://localhost:4000/inner-producted/"><![CDATA[<p>A record of some simple ideas.</p>
+<h2 id="文章中的第四种mtf曲线the-mtf-values-of-this-4th-type">文章中的第四种MTF曲线(The MTF values of this 4th type)</h2>]]></content><author><name>Chia-ch&apos;i</name></author><summary type="html"><![CDATA[文章翻译, 阅读, 解读MTF曲线, 笔记总结 Preface]]></summary></entry><entry><title type="html">Inner producted 一些问题</title><link href="http://localhost:4000/inner-producted/" rel="alternate" type="text/html" title="Inner producted 一些问题" /><published>2023-10-09T00:00:00+08:00</published><updated>2023-10-09T00:00:00+08:00</updated><id>http://localhost:4000/inner%20producted</id><content type="html" xml:base="http://localhost:4000/inner-producted/"><![CDATA[<p>A record of some simple ideas.</p>
 
 <h2 id="vector-inner-product">vector inner product</h2>
 
@@ -2339,263 +2865,4 @@ simpleTex, Math Snipping Tool这种识别论文中的公式使用OCR的小而美
 
 <p>在积分中额外引入了比例系数$\frac{1}{b-a}$,目的是归一化区间[a,b]的长度,使得内积不直接依赖于区间长度。</p>
 
-<h2 id="应用傅立叶级数">应用：傅立叶级数</h2>]]></content><author><name>Chia-ch&apos;i</name></author><summary type="html"><![CDATA[A record of some simple ideas.]]></summary></entry><entry><title type="html">Discrete Mathematics</title><link href="http://localhost:4000/CMU-Discrete-mathematics-2001-notes/" rel="alternate" type="text/html" title="Discrete Mathematics" /><published>2023-08-30T00:00:00-04:00</published><updated>2023-08-30T00:00:00-04:00</updated><id>http://localhost:4000/CMU%20Discrete%20mathematics%202001%20notes</id><content type="html" xml:base="http://localhost:4000/CMU-Discrete-mathematics-2001-notes/"><![CDATA[<p>虎头蛇尾…</p>
-
-<h1 id="离散数学-cmu-2001-notes">离散数学 CMU 2001 notes</h1>
-
-<h1 id="lec1">Lec1</h1>
-
-<h2 id="intro">intro</h2>
-
-<p>…</p>
-
-<h2 id="set">Set</h2>
-
-<ol>
-  <li>
-    <p>首先定义空集的概念  $\empty$ <strong>Definition</strong>: the only set include no elements.</p>
-  </li>
-  <li>
-    <p>交并补的概念    <font color="red">补充</font></p>
-  </li>
-</ol>
-
-<h2 id="the-sum-principle补充">The Sum Principle<font color="red">补充</font></h2>
-
-<h2 id="proof-of-ramseys-theorem">Proof of Ramsey’s Theorem</h2>
-
-<p>你想证明的这个等式可以通过组合数的性质和帕斯卡三角形来解释和证明。以下是证明的一种方式：</p>
-
-<p>首先，我们知道组合数 $\binom{n}{m}$ 表示从 $n$ 个元素中选择 $m$ 个元素的组合数。这可以表示为：</p>
-
-\[\binom{n}{m} = \frac{n!}{m!(n-m)!}\]
-
-<p>同样，$\binom{n}{m+1}$ 表示从 $n$ 个元素中选择 $m+1$ 个元素的组合数：</p>
-
-\[\binom{n}{m+1} = \frac{n!}{(m+1)!(n-m-1)!}\]
-
-<p>然后，我们来看左边的等式：</p>
-
-\[\binom{n}{m} + \binom{n}{m+1}\]
-
-<p>将上述两个组合数的表达式代入，得到：</p>
-
-\[\frac{n!}{m!(n-m)!} + \frac{n!}{(m+1)!(n-m-1)!}\]
-
-<p>现在，我们的目标是将这个式子变形成 $\binom{n+1}{m+1}$ 的形式。我们注意到，$\binom{n+1}{m+1}$ 也是从 $n+1$ 个元素中选择 $m+1$ 个元素的组合数：</p>
-
-\[\binom{n+1}{m+1} = \frac{(n+1)!}{(m+1)!(n-m)!}\]
-
-<p>我们希望将左边的式子变形成 $\binom{n+1}{m+1}$ 的形式。为此，我们可以考虑如何将两个分数相加，使得分母部分与 $\binom{n+1}{m+1}$ 相同。我们观察到：</p>
-
-\[\frac{n!}{m!(n-m)!} + \frac{n!}{(m+1)!(n-m-1)!} = \frac{(n+1)!}{(m+1)!(n-m)!}\]
-
-<p>上述等式成立是因为分子部分相等。这就完成了证明。</p>
-
-<p>因此，我们证明了：</p>
-
-\[\binom{n}{m} + \binom{n}{m+1} = \binom{n+1}{m+1}\]
-
-<p>这个等式在组合数学中被称为 Pascal’s Rule（帕斯卡规则），它在帕斯卡三角形中有重要的几何解释。</p>
-
-<h2 id="下面笔记使用北理莫斯科的lec-notes">下面笔记使用北理莫斯科的lec notes</h2>
-
-<h2 id="fri-18th">Fri. 18th</h2>
-
-<h2 id="32-集合的概念">3.2 集合的概念</h2>
-
-<p><strong><font color="green">集合 </font></strong></p>
-
-<p><strong>定义</strong> 我们指元素的组合。</p>
-
-<p><strong>数学描述</strong><font color="red">latex打不出空格</font>{} 
-\(A={a:a满足specific的性质}\)
-<strong><font color="green">两个集合的差集 </font></strong></p>
-
-<p><strong>定义</strong></p>
-
-<h3 id="322-关系">3.2.2 关系</h3>
-
-<h4 id="二元关系">二元关系</h4>
-
-<font color="red">什么是二元关系，没有被定义</font>
-
-<font color="blue">我觉得是两个未知数的关系就是2元关系</font>
-
-<font color="red">问:满足函数关系的本事是不是要满足映射关系，映射关系set A 到set  B，从一个A的element出发，只对应一个set B中的b，但是没有说是满射(满射)的英文是什么onto？</font>
-
-<p><strong>onto</strong> 是set B 中的b elements at least 对应一个 set A中的a</p>
-
-<h2 id="8-20th-计数">8 20th 计数</h2>
-
-<p>例 3.16. 定义 $[n]^{(r)}={T \subseteq{1,2, \ldots, n}:|T|=r}$. 设 $\mathcal{A} \subseteq[n]^{(r)}$. 设 $s&gt;r$ 。定义
-\(\mathcal{B}=\left\{B \in[n]^{(s)}: \exists A \in \mathcal{A}, \text { s.t. } A \subseteq B\right\} .\)
-$|\mathcal{B}|$ 有多大呢（当然 $|\mathcal{B}|$ 依赖于 $|\mathcal{A}|)$ ?
-解答. 上界：根据定义 $\mathcal{B} \subseteq[n]^{(s)}$ ，所以 $|\mathcal{B}| \leq\left|[n]^{(s)}\right|=\left(\begin{array}{l}n \ s\end{array}\right)$.
-下界：考虑如下集合
-\(M=\{(A, B) \in \mathcal{A} \times \mathcal{B}: A \subseteq B\} .\)
-分别采用 $\mathcal{A}$ 和 $\mathcal{B}$ 的观点来计算 $|M|$ 。</p>
-<ul>
-  <li>
-    <table>
-      <tbody>
-        <tr>
-          <td>从 $\mathcal{A}$ 的观点：对每个 $A \in \mathcal{A}, A$ 包含在 $\left(\begin{array}{l}n-r \ s-r\end{array}\right)$ 个不同的 $B$ 中。因此, $</td>
-          <td>M</td>
-          <td>=</td>
-          <td>\mathcal{A}</td>
-          <td>\left(\begin{array}{l}n-r \ s-r\end{array}\right)$.</td>
-        </tr>
-      </tbody>
-    </table>
-  </li>
-  <li>
-    <table>
-      <tbody>
-        <tr>
-          <td>从 $\mathcal{B}$ 的观点：对每个 $B \in \mathcal{B}, B$ 最多包含 $\left(\begin{array}{l}s \ r\end{array}\right)$ 个不同的 $A$ 。因此, $</td>
-          <td>M</td>
-          <td>\leq</td>
-          <td>\mathcal{B}</td>
-          <td>\left(\begin{array}{l}s \ r\end{array}\right)$.</td>
-        </tr>
-      </tbody>
-    </table>
-  </li>
-</ul>
-
-<h3 id="解释">解释</h3>
-
-<font color="red">$[n]^{(r)}=\{T \subseteq\{1,2, \ldots, n\}:|T|=r\}$</font>
-
-<p>对这个定义的明晰</p>
-
-<table>
-  <tbody>
-    <tr>
-      <td>$[ ]$ and $()$ 都是对set的描述，其中集合中元素的个数的表示方法是$</td>
-      <td>A</td>
-      <td>$ ，比如$</td>
-      <td>\mathcal{P}(A)</td>
-      <td>=2^{</td>
-      <td>A</td>
-      <td>}$</td>
-    </tr>
-  </tbody>
-</table>
-
-<p>${T \subseteq{1,2, \ldots, n}}$</p>
-
-<p>则表示$T$ 被这个set包含，T中可能有1-n之间的元素，</p>
-
-<table>
-  <tbody>
-    <tr>
-      <td>$</td>
-      <td>T</td>
-      <td>=r$</td>
-    </tr>
-  </tbody>
-</table>
-
-<p>说明T的size就是r</p>
-
-<p>$[n]^{(r)}$</p>
-
-<p>说明有r组n这个set要配对，T中的元素分别输出到n值</p>
-
-<p>$[n]^{(r)}$ 表示从集合 ${1, 2, \ldots, n}$ 中选取$r$个元素的所有可能集合。而不是 “有r组n这个set要配对，T中的元素分别输出到n值”。</p>
-
-<p>$[n]^{(r)}$ 表示的是从集合 ${1, 2, \ldots, n}$ 中选取$r$个元素的所有可能集合，而不是将元素与n进行配对。</p>
-
-<h2 id="康尔托对角线证法">康尔托对角线证法</h2>
-
-<p>主要的构造方法是在[0,1]中，使用小数表示一个自然数，或者说使用一个双射来连接关系的情况下，特使得$x_{ij}(j=i)$ 的位置设置一个不同数，使用这个方式，当一个数字的每个数上的位置，不可以被对角线上对应位置的数字表示的时候，就说明他</p>
-
-<h2 id="图-tue">图 Tue.</h2>
-
-<h3 id="定义41">定义4.1</h3>
-
-<p><strong>欧拉通路</strong>：经过图中的每一条边一次且仅一次。</p>
-
-<p><strong>欧拉回路</strong>：经过图中的每一条边一次且仅一次，且回到出发点。</p>
-
-<h3 id="定义42">定义4.2</h3>
-
-<p>设 v 是图中的某个顶点，与 v 连接的边的数目叫做 v 的度数，记作 d(v)。</p>
-
-<p>###命题 4.3</p>
-
-<p>对任意的图 G，如果图 G 中存在一条欧拉<strong>通路</strong>，则<strong>最多</strong>只有<strong>两个</strong>点的度数是奇数。</p>
-
-<h3 id="命题-44">命题 4.4</h3>
-
-<p>对任意的图 G，如果图 G 中存在一条欧拉<strong>回路</strong>，则<strong>每个</strong>点的度数都是<strong>偶数</strong></p>
-
-<p><em>命题4.4和4.3 只可以判断在本身存在时，这里的检测方法就是说，</em></p>
-
-<h3 id="定义-45">定义 4.5</h3>
-
-<p>一个（无向，即边没有方向）图 $G$  由点和边组成，点的集合通常用$V$   表示，边的集合用 $E$  表示。图 $G$ 一般写作
-\(G = (V, E)\)
-<strong>点的相邻</strong> 两个<strong>点</strong>有边</p>
-
-<p><strong>边的相邻</strong> 两个边之间有点</p>
-
-<p><strong>点的度数</strong> 点发散或者接收的条数</p>
-
-<p><strong>简单图</strong> 两点之间最多一条边（不会不复杂，但是会没有来回</p>
-
-<font color="red">**通路** 从一点到另一点由边连接的序列（点和边均允许重复）</font>
-
-<font color="red">**路径** **点**<font color="green">不重复</font>的通路</font>
-
-<font color="red">**回路** 起点和终点相同的通路</font>
-<p><strong>(到底是一个成环的路还是？首尾链接的路可以)</strong></p>
-
-<p><strong>连通图</strong> 任意两点之间均有通路连接</p>
-
-<p><strong>子图</strong> 由图的某些点和这些点上某些边组成的图</p>
-
-<p>导出子图：由图的某些点和这些点上所有的边组成的图/<em>感觉没什么用，就是选了一些线和点呗</em></p>
-
-<p>连通分支：</p>
-
-<h3 id="定理47">定理4.7</h3>
-
-<p>对任意的连通图 G，</p>
-
-<ul>
-  <li>图 G 中存在一条欧拉通路，<strong>当且仅</strong>当要么每个点的度数都是偶数，要么恰有两点的度数是奇数。</li>
-  <li>图 G 中存在一条欧拉回路，<strong>当且仅当</strong>每个点的度数都是偶数。</li>
-</ul>
-
-<p><strong><em>充分必要？</em></strong></p>
-
-<h3 id="定理48-49握手定理和其的推论">定理4.8 &amp;4.9握手定理和其的推论</h3>
-
-<p>有点问题</p>
-
-<p>使用对称理论证明</p>
-
-<h2 id="树与环-aug-25th">树与环 Aug. 25th</h2>
-
-<p>定义</p>
-
-<h2 id="aug-26th-图的同构">Aug. 26th 图的同构</h2>
-
-<p><strong>定义</strong></p>
-
-<p>对有些问题而言，我们只关心边的相互关系，并不对顶点做过多区分，数学上我们考虑一个新的概念，叫做同构。</p>
-
-<p>满足双射，在两个图$G=(V,E)$ 和$H=(V’,E’)$中，</p>
-
-<p>三个算法</p>
-
-<h3 id="1-贪心算法-最小生成树-kruskal-算法">1. 贪心算法 最小生成树 Kruskal 算法</h3>
-
-<p>具向的理解是首先把最短到最长的权重的line升序排列取出，再使用这些line上的权重值进行连接，在连接时观察是否连结成环，如果成环，则取消</p>
-
-<h3 id="2-信息熵算法">2. 信息熵算法</h3>
-
-<h3 id="3-dijkstra-算法">3. Dijkstra 算法</h3>]]></content><author><name>Chia-ch&apos;i</name></author><summary type="html"><![CDATA[虎头蛇尾…]]></summary></entry></feed>
+<h2 id="应用傅立叶级数">应用：傅立叶级数</h2>]]></content><author><name>Chia-ch&apos;i</name></author><summary type="html"><![CDATA[A record of some simple ideas.]]></summary></entry></feed>
