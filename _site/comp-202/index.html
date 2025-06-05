@@ -1,0 +1,1663 @@
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>ELEC202 Lec 7&amp;8 FM&amp;PM _ Chia-ch’i‘s Web page</title>
+<meta name="description" content="mainly talk about FM&amp;PM in ELEC202 at Lec 7&amp;8">
+
+
+  <meta name="author" content="Chia-ch'i">
+  
+  <meta property="article:author" content="Chia-ch'i">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_GB">
+<meta property="og:site_name" content="Chia-ch'i‘s Web page">
+<meta property="og:title" content="ELEC202 Lec 7&amp;8 FM&amp;PM">
+<meta property="og:url" content="http://localhost:4000/comp-202/">
+
+
+  <meta property="og:description" content="mainly talk about FM&amp;PM in ELEC202 at Lec 7&amp;8">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2023-04-02T00:00:00+08:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="http://localhost:4000/comp-202/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "Chia-ch'i",
+      "url": "http://localhost:4000/"
+    
+  }
+</script>
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+
+  <link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Chia-ch'i‘s Web page Feed">
+
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--post">
+
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          Chia-ch'i‘s Web page
+          <span class="site-subtitle"> </span>
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/post/">All Posts</a>
+            </li><li class="masthead__menu-item">
+              <a href="/collection-archive/">Collections</a>
+            </li><li class="masthead__menu-item">
+              <a href="https://chat.openai.com/">Google</a>
+            </li><li class="masthead__menu-item">
+              <a href="/about/">About</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+  
+    
+
+
+
+<nav class="breadcrumbs">
+  <ol itemscope itemtype="https://schema.org/BreadcrumbList">
+    
+    
+    
+      
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a href="/" itemprop="item"><span itemprop="name">Home</span></a>
+
+          <meta itemprop="position" content="1" />
+        </li>
+        <span class="sep">/</span>
+      
+      
+        <li class="current">ELEC202 Lec 7&8 FM&PM</li>
+      
+    
+  </ol>
+</nav>
+
+  
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person" class="h-card">
+
+  
+    <div class="author__avatar">
+      <a href="http://localhost:4000/">
+        <img src="/assets/images/88x88.png" alt="Chia-ch'i" itemprop="image" class="u-photo">
+      </a>
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name p-name" itemprop="name">
+      <a class="u-url" rel="me" href="http://localhost:4000/" itemprop="url">Chia-ch'i</a>
+    </h3>
+    
+      <div class="author__bio p-note" itemprop="description">
+        <p>The primary purpose of this website is to motivate me to write about life, thoughts, and learning observations.</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name" class="p-locality">Atlanta.US</span>
+        </li>
+      
+
+      
+        
+          
+            <li><a href="mailto:notmyemailcode@gmail.com" rel="nofollow noopener noreferrer me"><i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+          
+            <li><a href="https://bokehforu.github.io/" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fas fa-fw fa-link" aria-hidden="true"></i><span class="label">Website</span></a></li>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer me">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <div class="archive">
+    
+      <h1 id="page-title" class="page__title">ELEC202 Lec 7&8 FM&PM</h1>
+    
+    <p>mainly talk about FM&amp;PM in ELEC202 at Lec 7&amp;8</p>
+
+<h2 id="信号的过程">信号的过程</h2>
+
+<p>Components</p>
+
+<ul>
+  <li>Source encoder converts message into message signal.</li>
+  <li>Transmitter converts message signal or bits into format appropriate for channel transmission (analog/digital signal).</li>
+  <li>Channel introduces distortion, noise, and interference.</li>
+  <li>Receiver decodes received signal back to message signal.</li>
+  <li>Source decoder decodes message signal back into original message.</li>
+</ul>
+
+<h2 id="communication-system">Communication System</h2>
+
+<h1 id="comp202-lec-78-fmpm">COMP202 Lec 7&amp;8 FM&amp;PM</h1>
+
+<ol>
+  <li>
+    <p><strong>PM即时频率</strong>：$f_i(t) = f_c + k_p \frac{dm}{dt}$，其中 $f_c$ 是载波频率，$k_p$ 是相位调制的灵敏度，$m(t)$ 是消息信号，$\frac{dm}{dt}$ 是消息信号的导数。</p>
+  </li>
+  <li>
+    <p><strong>FM即时频率</strong>：$f_i(t) = f_c + k_f m(t)$，其中 $f_c$ 是载波频率，$k_f$ 是频率调制的灵敏度，$m(t)$ 是消息信号。</p>
+  </li>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td><strong>频率偏差</strong>：$\Delta f = \max</td>
+          <td>f_i - f_c</td>
+          <td>$，频率偏差是指在频率调制中，载波频率最大的偏离程度。</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+  <li>
+    <p><strong>单音频FM信号</strong>：$X_{FM}(t) = A_c \cos[2\pi f_c t + \beta \sin(2\pi f_m t)]$，这是一个单音频的频率调制信号的公式。其中 $A_c$ 是载波幅度，$f_c$ 是载波频率，$\beta$ 是调制指数，$f_m$ 是消息信号的频率。</p>
+  </li>
+  <li>
+    <p><strong>调制指数</strong>：$\beta = \frac{\Delta f}{f_m}$，调制指数是频率偏差和消息频率的比值，在频率调制中，它是描述调制深度的关键参数。</p>
+  </li>
+  <li>
+    <p><strong>卡森规则</strong>：$BW_{FM} \approx 2(1 + \beta)f_m$，这是卡森规则，用于估计频率调制信号的带宽。其中 $BW_{FM}$ 是频率调制信号的带宽，$\beta$ 是调制指数，$f_m$ 是消息信号的频率。</p>
+  </li>
+  <li>如果 $\beta « 1$，那么可以使用近似公式：$BW_{NB} \approx 2f_m$，这是一个在调制指数很小的情况下用于估计频率调制信号带宽的近似公式。</li>
+</ol>
+
+<h1 id="lec-7">LEC 7</h1>
+
+<h2 id="fm频率调制">FM频率调制</h2>
+
+<p>关于FM和PM，首先要知道三角函数的背景知识，定义一个正弦波的公式为</p>
+
+\[\mathrm{y}=\mathrm{A} \sin (\mathrm{Bx}+\mathrm{C})+\mathrm{D}\]
+
+<ul>
+  <li>$\mathrm{A}$ 是幅值</li>
+  <li>$\mathrm{B}$是由$2 \pi f$组成的</li>
+  <li>$C$ is the value of the phase</li>
+  <li>$D$ is the shifting of the $Y$ vaule in coordinate axes</li>
+</ul>
+
+<p>So we could say that the trigonometric functions can be showed below 
+\(x=A \sin \left(\frac{2 \pi}{T} t+\varphi\right)=A \sin (2 \pi f t+\varphi)\)</p>
+
+<p>The key point here is I need understand the meaning and detail of phase and frequency. After it , we can talk about FM and PM right now.在上述等式中，T没有被讨论到。</p>
+
+<h2 id="fm定义">FM定义</h2>
+<p>频率调制 调制是将载波信号的频率与载波信号的频率进行线性变化的过程，也是与信息信号进行线性变化的过程。
+在PPT中，Dr.W give us that the definition of the FM which is a envaluation showing below.
+\(f_i=f_c+k_f m(t)\)</p>
+<ul>
+  <li>$k_f$ is the modulation sensitivity</li>
+  <li>modulation sensitivity 本质上是一个常数，调制灵敏度通常由偏差灵敏度来衡量，即输入信号频率给定变化时输出信号频率的变化。偏差灵敏度以赫兹/伏特（Hz/V）为单位表示，是衡量调频解调器的频率与电压传递函数的斜率。</li>
+  <li>在PPT中说，If the unit of $m(t)$ is volts, the unit of $kf$ is Hz/V. 我感觉$m(t)$的单位在课程背景中就是$v$</li>
+  <li>$fi$ is the final wave function的频率</li>
+  <li>$f{c}$ is the carrier frequncy which we need add in.</li>
+</ul>
+
+<h2 id="fm的瞬时频率">FM的瞬时频率</h2>
+<p>瞬时频率的
+需要注意的是在这里需要明白频率和相位的关系。 频率是指信号在单位时间内完成的完整周期数，比如在一秒内完成的值。在这里举一个扩充的例子，$sin{（x）}$这个周期正弦波中，its $f$ is $1/2\pi$. It is from the front fact about $B$. It indicates that in 1s, 在x轴上，这个函数前进了$1/2\pi$的长度。这就是对频率$f$的定义。计算过程是
+\(B=1\)</p>
+
+\[B=2\pi f\]
+
+\[f=1/2\pi\]
+
+<p>因此，对于正弦波而言，频率可以表示为相位关于时间的导数，即f=dθ/dt。但是，这个关系式仅仅适用于正弦波这种特定形式的周期信号，并且仅仅在信号周期为定值时成立。
+Instantaneous frequency:
+\(f_i(t)=\frac{1}{2 \pi} \frac{d \theta(t)}{d t}=f_c+\frac{1}{2 \pi} \frac{d \varphi(t)}{dt}\)
+对于这个式子的解释是$\theta(t)$是例如$Sin\theta(t)$中的幅度角的值。由我们上面得出的正弦波的幅度和相位的关系和$B$的组成，可以知FM的调制方法后的信号的瞬时频率是
+\(f_i(t)=\frac{1}{2 \pi} \frac{d \theta(t)}{d t}\)
+解释一下就是由当前调制后信号的角度，经过$2\pi f$得出$f$后，求导得出此时的瞬时频率，同时由于FM的调制方法，我们可以得出载波信号的频率是不会改变的，在变化的是我们的$m(t)$.$m(t)$有自己的幅度角，对其求导，得出关系式的后半部分。
+\(f_i(t)=f_c+\frac{1}{2 \pi} \frac{d \varphi(t)}{dt}\)
+由于我们是FM，所以对于载波信号是直接改变信号的频率的，而由频率的变化转化成幅度角的变化是由之前的关系得出的，所以对于FM中我们已知的变化的信号对应的frequency，我们需要使用</p>
+
+<h3 id="相位-">**<font color="red">相位</font> **</h3>
+
+<p>\(\varphi(t)=k_f \int_{-\infty}^t m(\tau) d \tau\)
+来得出我们需要的角幅度，再在(8)中被求导，来得出我们需要的瞬时频率。</p>
+
+<h2 id="pm的瞬时频率公式">PM的瞬时频率公式</h2>
+
+<p>Instantaneous frequency:
+\(f_i(t)=\frac{1}{2 \pi} \frac{d \theta(t)}{d t}=f_c+\frac{1}{2 \pi} \frac{d \varphi(t)}{dt}\)</p>
+
+<p>PM调制直接是变化幅度角度，所以在使用此公式求瞬时frequency的时候，我们使用
+\(\varphi(t)=k_p*m(t)\)</p>
+
+<h2 id="maximum-freq-deviation-deviation-in-in-fm">Maximum-freq. deviation deviation in in FM</h2>
+
+<p>在频率调制（FM）中，最大频率偏差是指在信号传输过程中，载波频率被调制或偏离其原始频率的最大数量。最大频率偏差通常被指定为调频信号的一个参数，被定义为调制信号的瞬时频率与载波频率之间的最大差异。它通常以赫兹（Hz）为单位表示，与调制信号的振幅成正比。</p>
+
+<p>最大频率偏差决定了调频信号的带宽。</p>
+
+<p>公式如下,载波频率被调制或偏离其原始频率的最大数量。可以看到m(t)就是原始数据的函数表达
+\(\Delta f_{\max }=\max \left(f_i-f_c\right)=k_f \max [|m(t)|]\)</p>
+
+<h2 id="fm-modulation--index">FM modulation  index</h2>
+
+\[\beta_f=\frac{\Delta f_{\max }(调制指数)}{W(基带)}\]
+
+<p>where W  is the bandwidth of m(t).</p>
+
+<h2 id="pm-signal-representation">PM Signal Representation</h2>
+
+<p>PM调制是一种模拟调制技术，是指通过改变载波信号的相位来传输模拟信号。在相位调制中，相位与调制信号的瞬时振幅成正比。
+\(x(t)=A_c \cos \theta(t)=A_c \cos \left(2 \pi f_c t+\varphi(t)\right)\)
+这里要重新提什么是相位，就是最开头的C，而对于x(t)来说，这个等式描述的是调制后的信号图像，可以看到，有$f_c$和$\varphi(t)$ 这个本身在变化的信息上的角的度数。</p>
+
+<p>这个公式同时对FM和PM适用，用来求出他们的实际调制后的函数图像。我们使用不同的$\varphi(t)$来对应不同的调制方法。</p>
+
+<h3 id="fm">FM</h3>
+
+<p>$\varphi(t)$等于
+\(\varphi(t)=k_f \int_{-\infty}^t m(\tau) d \tau\)
+原因之前有提过，FM我们只有变化的频率值，而在这我们需要知道变化的频率对应的角度，所以使用积分求出对应的角度</p>
+
+<h3 id="pm">PM</h3>
+
+<p>在PM中，我们直接改变的就是相位角，使用$k_p* angle$的方法，就是我们改变的大小，所以在求的时候$\varphi(t)$不用经过任何处理</p>
+
+<p>$\varphi(t)$等于
+\(\varphi(t)=k_p\times m(t)\)</p>
+
+<p>$k_p$and $k_f$ are deviation constants for PM and FM, respectively.The maximum-phase deviation in PM system is given by
+\(\Delta \varphi_{\max }=k_P \max [|m(t)|]\)</p>
+
+<h2 id="pm-modulation-index">PM modulation index</h2>
+
+\[\beta_P=\Delta \varphi_{\text {max }}\]
+
+<font color="red">上面是什么</font>
+
+<h2 id="零零碎碎记的东西">零零碎碎记的东西</h2>
+
+<h3 id="小细节">小细节</h3>
+
+<p>Frequency or phase of the carrier varies according to the message signal. This is further divided into frequency and phase modulation.</p>
+
+<p>Frequency Modulation is the process of varying the frequency of the carrier signal linearly with the message signal.
+Phase Modulation is the process of varying the phase of the carrier signal linearly with the message signal.</p>
+
+<h3 id="am和fm的优劣">AM和FM的优劣</h3>
+
+<h4 id="与调幅-amplitude-am相比角度angleam调制的优点">与调幅 Amplitude (AM)相比，角度Angle(AM)调制的优点：</h4>
+
+<p><strong>更有效地使用功率</strong>： 像FM和PM这样的角度调制技术比AM更有效地使用功率，因为它们通过改变载波信号的频率或相位，而不是振幅来传输信息。载波信号的振幅保持不变，这意味着传输功率保持不变，从而更有效地利用功率。
+<strong>更好的信号质量</strong>： 与调幅相比，角调制技术更不容易受到噪音和干扰的影响。角度调制信号的信噪比（SNR）更高，这意味着信号质量更好。这是因为噪声和干扰主要影响信号的振幅，而在角度调制技术中，振幅保持不变。</p>
+
+<p><strong>更大的带宽</strong>：</p>
+
+<h4 id="角度angleam调制比amclassic的缺点">角度Angle(AM)调制比AM(classic)的缺点：</h4>
+
+<p><strong>通常更大的带宽</strong>：角度调制技术通常需要比AM更大的带宽。这是因为载波信号的频率或相位被调制，这导致边带在频率上扩散，导致更宽的带宽。
+<strong>较小的范围</strong>： 与调幅相比，角度调制技术的范围较小。这是因为接收器需要一个更高的信噪比（SNR）来解调信号。频率偏差越高，所需的信噪比就越高，这就限制了传输的范围。此外，角度调制信号受多径传播的影响，会造成干扰并降低范围。</p>
+
+<h3 id="角度调制特性">角度调制特性</h3>
+
+<p><strong>角度调制的特点有：</strong></p>
+
+<ol>
+  <li>FM/PM信号的功率不随调制而变化。</li>
+  <li>FM/PM信号没有能够复制调制的包络。</li>
+  <li>载波频偏与调制信号的幅度成正比。</li>
+</ol>
+
+<p><strong>简要解释：</strong></p>
+
+<ol>
+  <li>在角度调制中，频率和相位被用来调制载波信号，而不是振幅。因此，信号的功率不受调制影响，与原始载波信号的功率相同。</li>
+  <li>由于调制是通过改变相位或频率来实现的，因此无法在FM/PM信号的包络中复制出调制信号的形状。这与振幅调制(AM)不同，因为在AM中，信号的包络可以准确地复制出原始信号的形状。</li>
+  <li>调制信号的幅度变化会导致载波频率的偏移，这种频率偏移与调制信号的幅度成正比。因此，当调制信号的幅度变化较大时，载波的频率偏移也会相应地变大。</li>
+</ol>
+
+<h2 id="可以再放一个图片解释fm和pm的调制过程">可以再放一个图片解释FM和PM的调制过程</h2>
+
+<h1 id="lec-8">LEC 8</h1>
+
+<p><strong>Bandwidth</strong> estimation for FM, Carson’s Rule – Narrowband FM
+ – Wideband FM</p>
+
+<p>FM <strong>Demodulation</strong></p>
+
+<p>– Slope detector
+ – Zero-crossing detector</p>
+
+<h2 id="angle-modulation--recap">Angle Modulation : recap</h2>
+
+<font color="red">Modulated signal调制过的信号 is： $s(t)=A_c \cos \theta(t)$</font>
+
+<p>$\theta(t)$ is the angle:            $\theta(t)=f(m(t))$</p>
+
+<p>Standard FM:           $\theta(t)=2 \pi \mathrm{f}<em>{\mathrm{c}} t+k</em>{\mathrm{f}} \int \mathrm{m}(\tau) d \tau$</p>
+
+<p>频率调制 调制是将载波信号的频率与载波信号的频率进行线性变化的过程，也是与信息信号进行线性变化的过程。
+在PPT中，Dr.W give us that the definition of the FM which is a envaluation showing below.
+\(f_i=f_c+k_f m(t)\)
+所以 
+\(s(t)=A_c \cos (2 \pi \mathrm{f}_{\mathrm{c}} t+k_{\mathrm{f}} \int \mathrm{m}(\tau) d \tau)\)
+Single tone FM signal
+\(x_{F M}(t)=A_c \cos \left[2 \pi f_c t+\beta \sin \left(2 \pi f_m t\right)\right]\)
+瞬时频率
+\(f_i(t)=\frac{1}{2 \pi} \frac{d \theta(t)}{d t}=f_c+\frac{1}{2 \pi} \frac{d \varphi(t)}{dt}\)</p>
+
+<p><strong>对于这个函数来说，$ \beta \sin \left(2 \pi f_m t\right)$ 和$k_{\mathrm{f}} \int \mathrm{m}(\tau) d \tau$ 是相等的</strong></p>
+
+<p>Instantaneous frequency:    $f_i=f_c+k_f m(t)$</p>
+
+<p>$kf$ is just a constant – modulation sensitivity.</p>
+
+<p><strong>phase in the integral of frequency, and frequency is the derivative of the phase</strong></p>
+
+<p>Instantaneous frequency = derivative of the angle</p>
+
+<p>(for PM) $\omega_i(t)=\omega_c+k_p m^{\prime}(t)$</p>
+
+<p>(for FM) $\omega_i(t)=\omega_c+k_f m(t)$</p>
+
+<p>Frequency deviation $=$ frequency sensitivity $\times \max $(message)</p>
+
+<p>Frequency swing $=2 \times$ frequency deviation</p>
+
+<p>Modulation index $=$ deviation ratio $=\beta$</p>
+
+<p>$\beta$$\begin{aligned} &amp; =\text { maximum frequency deviation } \div \text { baseband bandwidth } \ &amp; =\Delta f / f_{\mathrm{m}}\end{aligned}$</p>
+
+<h2 id="bandwidth">Bandwidth</h2>
+
+<h3 id="narrowband-fm">Narrowband FM</h3>
+
+<h2 id="demodulation">Demodulation</h2>
+
+
+
+<ul class="taxonomy__index">
+  
+  
+    <li>
+      <a href="#2025">
+        <strong>2025</strong> <span class="taxonomy__count">11</span>
+      </a>
+    </li>
+  
+    <li>
+      <a href="#2024">
+        <strong>2024</strong> <span class="taxonomy__count">3</span>
+      </a>
+    </li>
+  
+    <li>
+      <a href="#2023">
+        <strong>2023</strong> <span class="taxonomy__count">8</span>
+      </a>
+    </li>
+  
+</ul>
+
+
+
+
+  <section id="2025" class="taxonomy__section">
+    <h2 class="archive__subtitle">2025</h2>
+    <div class="entries-list">
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/59.%E8%9E%BA%E6%97%8B%E7%9F%A9%E9%98%B5II/" rel="permalink">2025-06-04 lc59. Spiral Matrix II
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          2 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+
+date: 2025-06-04
+name: 
+aliases: 
+tags:
+
+  leetcode
+  python
+  语法
+date_last_edit: 2025-06-04 04:47
+—
+    2025-06-04
+  
+
+
+</p>
+  </article>
+</div>
+
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/977.-Squares-of-a-Sorted-Array/" rel="permalink">2025-06-03 lc977.Squares of a Sorted Array
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          2 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+
+date: 2025-06-03
+name: 
+aliases: 
+tags:
+
+  leetcode
+  python
+  双指针
+date_last_edit: 2025-06-03 18:37
+—
+    2025-06-03
+  
+
+
+</p>
+  </article>
+</div>
+
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/704.-Binary-Search/" rel="permalink">2025-06-03 lc704. Binary Search
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+
+date: 2025-06-03
+name: 
+aliases: 
+tags:
+
+  leetcode
+  python
+  BinarySearch
+date_last_edit: 2025-06-03 16:46
+—
+    2025-06-03
+  
+
+
+</p>
+  </article>
+</div>
+
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/209.-Minimum-Size-Subarray-Sum/" rel="permalink">2025-06-03 lc209. Minimum Size Subarray Sum
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+
+date: 2025-06-04
+name: 
+aliases: 
+tags:
+
+  leetcode
+  python
+  双指针
+date_last_edit: 2025-06-04 00:31
+—
+    2025-06-04
+  
+
+
+</p>
+  </article>
+</div>
+
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/%E5%90%AB%E8%93%84%E5%92%8C%E7%9B%B4%E7%99%BD%E5%86%99%E6%B3%95%E7%9A%84%E6%80%9D%E8%80%83%E5%92%8C%E5%AF%B9%E6%AF%94/" rel="permalink">2025-05-29-反思日记-含蓄和直白写法的思考和对比(我与GPT的问答和后记前言)
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          5 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">使用GPT辅助对话的思考
+
+</p>
+  </article>
+</div>
+
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/146.-lru/" rel="permalink">2025-05-23 Leetcode 146.LRU 5433字记录思考的过程
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          17 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">使用 GPT refine 了文章
+
+</p>
+  </article>
+</div>
+
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/Dot-products%E7%82%B9%E7%A7%AF-and-duality-Chapter-9/" rel="permalink">2025-05-01 Dot products点积 and duality Chapter 9/16
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          12 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">3Blue1Brown
+
+</p>
+  </article>
+</div>
+
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/%E4%BB%8EMatrix-%E4%B9%98%E6%B3%95%E8%AE%A1%E7%AE%97%E5%87%BA%E5%8F%91%E7%9A%84Linear-Algebra/" rel="permalink">Linear Algebra Starting from Matrix Multiplication
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          19 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">好像写成一个的线代的内容了, 有很多未完待续的内容
+
+</p>
+  </article>
+</div>
+
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/learning/" rel="permalink">Thinking and Re-thinking of Learning and Happiness
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Using LLMs to refine context through chaotic thinking, but I think GPT-4.5 (2025-04-22) is quite good.
+
+</p>
+  </article>
+</div>
+
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/recursive-problem/" rel="permalink">Recursive problem and Thinking Process
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          9 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">The article contains mistakes and misunderstandings, as it is a record of my own incorrect notes rather than a proper summary document.
+
+</p>
+  </article>
+</div>
+
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/How-I-use-LLMs-by-Andrej-Karpathy-%E7%9C%8B%E5%90%8E%E6%80%BB%E7%BB%93/" rel="permalink">2025-03-07-How I use LLMs by Andrej Karpathy 看后总结
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          5 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">https://www.youtube.com/watch?v=EWvNQjAaOHw
+
+</p>
+  </article>
+</div>
+
+      
+    </div>
+    <a href="#page-title" class="back-to-top">Back to top &uarr;</a>
+  </section>
+
+  
+
+  <section id="2024" class="taxonomy__section">
+    <h2 class="archive__subtitle">2024</h2>
+    <div class="entries-list">
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/Life-goals-at-30/" rel="permalink">Life goals before the age of 30 (in addition to finding a job)
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">:)
+
+</p>
+  </article>
+</div>
+
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/visa-preparation/" rel="permalink">签证准备材料list
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">记录签证准备材料的list
+
+</p>
+  </article>
+</div>
+
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/how-to-read-mtf-curves.md/" rel="permalink">Notes for ‘How To Read MTF Curves’ article
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          16 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">文章翻译, 阅读, 解读MTF曲线, 笔记总结
+Preface
+
+</p>
+  </article>
+</div>
+
+      
+    </div>
+    <a href="#page-title" class="back-to-top">Back to top &uarr;</a>
+  </section>
+
+  
+
+  <section id="2023" class="taxonomy__section">
+    <h2 class="archive__subtitle">2023</h2>
+    <div class="entries-list">
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/inner-producted/" rel="permalink">Inner producted 一些问题
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">A record of some simple ideas.
+
+</p>
+  </article>
+</div>
+
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/learning-how-to-learn-powerful-mental-tools-to-help-you-master-tough-subjects/" rel="permalink">learning how to learn powerful mental tools to help you master tough subjects
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          46 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">UCLA online
+learning how to learn powerful mental tools to help you master tough subjects
+
+</p>
+  </article>
+</div>
+
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/CMU-Discrete-mathematics-2001-notes/" rel="permalink">Discrete Mathematics
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">虎头蛇尾…
+
+</p>
+  </article>
+</div>
+
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/Injective,-Surjective-and-Bi-jective/" rel="permalink">Injective, Surjective and bi-jective
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          2 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">A small concept in discrete mathematics
+
+</p>
+  </article>
+</div>
+
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/Lec1-and-lec2-content/" rel="permalink">MIT missing Cour
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          7 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">进度条…(2/8)
+
+</p>
+  </article>
+</div>
+
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/proof-of-Cramer-s-rule/" rel="permalink">Proof of Cramer’s Rule
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">The article contains three proofs.
+
+</p>
+  </article>
+</div>
+
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/elec211pdf/" rel="permalink">ELEC211: Digital Electronics &amp; Microprocessor Systems
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+
+</p>
+  </article>
+</div>
+
+      
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/comp-202/" rel="permalink">ELEC202 Lec 7&amp;8 FM&amp;PM
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          7 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">mainly talk about FM&amp;PM in ELEC202 at Lec 7&amp;8
+
+</p>
+  </article>
+</div>
+
+      
+    </div>
+    <a href="#page-title" class="back-to-top">Back to top &uarr;</a>
+  </section>
+
+  
+
+
+  </div>
+</div>
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <!-- MathJax 配置和加载 -->
+    <script>
+      window.MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          displayMath: [['$$', '$$'], ['\\[', '\\]']]
+        }
+      };
+    </script>
+    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-GXFVKNJ25Z"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-GXFVKNJ25Z');
+    </script>
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+
+    
+      <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2025 Chia-ch'i. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+
+
+
+  </body>
+</html>
